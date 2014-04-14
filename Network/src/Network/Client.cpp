@@ -348,15 +348,6 @@ namespace Vriska
   }
 
   VRISKA_ACCESSIBLE
-  int		Client::falseRead(std::string& buffer, unsigned int offset)
-  {
-    if (!_isBlocking)
-      return (SimpleClient::falseRead(buffer, offset));
-    else
-      return (0);
-  }
-
-  VRISKA_ACCESSIBLE
   int		Client::falseRead(std::string& buffer, size_t size, unsigned int offset)
   {
     if (!_isBlocking)

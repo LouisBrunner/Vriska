@@ -25,7 +25,7 @@ namespace Vriska
 
   bool			WindowsThread::launch(IRunnable& run)
   {
-    return ((_handle = CreateThread(NULL, 0, &start_thread, &run, 0, _threadId)) != NULL);
+    return ((_handle = CreateThread(NULL, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(&start_thread), &run, 0, _threadId)) != NULL);
   }
 
   bool			WindowsThread::join()

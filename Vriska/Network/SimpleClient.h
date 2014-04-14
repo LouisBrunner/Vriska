@@ -27,7 +27,6 @@ namespace Vriska
     virtual int			read(void *buffer, size_t size);
     virtual int			read(std::string& buffer);
     virtual int			read(std::string& buffer, size_t size);
-    virtual int			falseRead(std::string& buffer, unsigned int offset = 0);
     virtual int			falseRead(std::string& buffer, size_t size, unsigned int offset = 0);
     virtual int			falseRead(void *buffer, size_t size, unsigned int offset = 0);
     virtual void		shiftRead(unsigned int size);

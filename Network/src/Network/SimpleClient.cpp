@@ -37,12 +37,6 @@ namespace Vriska
   }
 
   VRISKA_ACCESSIBLE
-  int		SimpleClient::falseRead(std::string& buffer, unsigned int offset)
-  {
-    return (_brRead.falseRead(buffer, offset));
-  }
-
-  VRISKA_ACCESSIBLE
   int		SimpleClient::falseRead(std::string& buffer, size_t size, unsigned int offset)
   {
     return (_brRead.falseRead(buffer, size, offset));

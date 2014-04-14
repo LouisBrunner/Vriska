@@ -56,7 +56,6 @@ namespace Vriska
     int				read(void *buffer, size_t size);
     int 			read(std::string& buffer);
     int 			read(std::string& buffer, size_t size);
-    int				falseRead(std::string& buffer, unsigned int offset = 0);
     int				falseRead(std::string& buffer, size_t size, unsigned int offset = 0);
     int				falseRead(void *buffer, size_t size, unsigned int offset = 0);
     void			shiftRead(unsigned int size);
