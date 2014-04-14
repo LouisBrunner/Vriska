@@ -1,10 +1,10 @@
 
-#include <Vriska/Network/INativeSocket.hh>
+#include <Vriska/Network/INativeSocket.h>
 
 #ifdef VRISKA_WINDOWS
-# include <Vriska/Network/WindowsSocket.hh>
+# include <Vriska/Network/WindowsSocket.h>
 #else
-# include <Vriska/Network/LinuxSocket.hh>
+# include <Vriska/Network/LinuxSocket.h>
 #endif // !VRISKA_WINDOWS
 
 namespace Vriska

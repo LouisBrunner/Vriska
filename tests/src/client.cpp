@@ -1,9 +1,9 @@
 
-#include <Vriska/Network.hh>
-#include <Vriska/Network.hh>
+#include <Vriska/Network.h>
+#include <Vriska/Network.h>
 
-#include <Vriska/Threads.hh>
-#include <Vriska/Threads.hh>
+#include <Vriska/Threads.h>
+#include <Vriska/Threads.h>
 
 #define TEST_ERR(f, s) do { Vriska::Error::Code e = f; if (e != Vriska::Error::NoError) { std::cout << "Error at '" << s << "': " << Vriska::Error::getMessage(e) << std::endl; return (1); } } while(0);
 

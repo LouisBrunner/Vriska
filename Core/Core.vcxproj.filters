@@ -25,4 +25,29 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Vriska\Core.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Core\Error.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Core\OS.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Core\Time.h">
+      <Filter>Header Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Vriska\Core\Data.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Vriska\Core\Exceptions.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Vriska\Core\StringUtils.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>

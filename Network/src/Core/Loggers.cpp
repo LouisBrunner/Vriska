@@ -1,5 +1,5 @@
 
-#include <Vriska/Network/Loggers.hh>
+#include <Vriska/Network/Loggers.h>
 
 namespace Vriska
 {

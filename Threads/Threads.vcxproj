@@ -87,6 +87,28 @@
     <ClCompile Include="src\Thread\Thread.cpp" />
     <ClCompile Include="src\Thread\WindowsThread.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Vriska\Threads.h" />
+    <None Include="..\Vriska\Threads\CondVar.h" />
+    <None Include="..\Vriska\Threads\ILockable.h" />
+    <None Include="..\Vriska\Threads\INativeCondVar.h" />
+    <None Include="..\Vriska\Threads\INativeMutex.h" />
+    <None Include="..\Vriska\Threads\INativeThread.h" />
+    <None Include="..\Vriska\Threads\IRunnable.h" />
+    <None Include="..\Vriska\Threads\LinuxCondVar.h" />
+    <None Include="..\Vriska\Threads\LinuxMutex.h" />
+    <None Include="..\Vriska\Threads\LinuxThread.h" />
+    <None Include="..\Vriska\Threads\Mutex.h" />
+    <None Include="..\Vriska\Threads\ScopedLock.h" />
+    <None Include="..\Vriska\Threads\Thread.h" />
+    <None Include="..\Vriska\Threads\ThreadPool.h" />
+    <None Include="..\Vriska\Threads\WindowsCondVar.h" />
+    <None Include="..\Vriska\Threads\WindowsMutex.h" />
+    <None Include="..\Vriska\Threads\WindowsThread.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Vriska\Threads\SafeList.hpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -1,8 +1,8 @@
 
-#include <Vriska/Network/SocketSet.hh>
+#include <Vriska/Network/SocketSet.h>
 
 // Forward declaration completion
-#include <Vriska/Network/INativeSocket.hh>
+#include <Vriska/Network/INativeSocket.h>
 
 namespace Vriska
 {

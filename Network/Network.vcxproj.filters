@@ -52,4 +52,48 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Vriska\Network\BufferRing.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Network\Client.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Network\ICallable.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Network\INativeSocket.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Network\LinuxSocket.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Network\Loggers.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Network.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Network\Server.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Network\SimpleClient.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Network\Socket.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Network\SocketClient.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Network\SocketServer.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Network\SocketSet.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Network\WindowsSocket.h">
+      <Filter>Header Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

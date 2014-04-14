@@ -1,5 +1,5 @@
 
-#include <Vriska/Core/Time.hh>
+#include <Vriska/Core/Time.h>
 
 namespace Vriska
 {

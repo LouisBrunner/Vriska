@@ -1,5 +1,5 @@
 
-#include <Vriska/Network/BufferRing.hh>
+#include <Vriska/Network/BufferRing.h>
 
 namespace Vriska
 {

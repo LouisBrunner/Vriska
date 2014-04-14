@@ -2,10 +2,10 @@
 #ifndef SAFELIST_HPP_
 # define SAFELIST_HPP_
 
-# include <Vriska/Core/Time.hh>
-# include <Vriska/Threads/CondVar.hh>
-# include <Vriska/Threads/ILockable.hh>
-# include <Vriska/Threads/Mutex.hh>
+# include <Vriska/Core/Time.h>
+# include <Vriska/Threads/CondVar.h>
+# include <Vriska/Threads/ILockable.h>
+# include <Vriska/Threads/Mutex.h>
 # include <list>
 
 namespace Vriska
@@ -27,7 +27,7 @@ namespace Vriska
       return (_list.empty());
     }
 
-    virtual unsigned int	size() const
+    virtual size_t	size() const
     {
       return (_list.size());
     }

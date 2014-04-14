@@ -1,10 +1,10 @@
 
-#include <Vriska/Threads/CondVar.hh>
+#include <Vriska/Threads/CondVar.h>
 
 #ifdef VRISKA_WINDOWS
-# include <Vriska/Threads/WindowsCondVar.hh>
+# include <Vriska/Threads/WindowsCondVar.h>
 #else
-# include <Vriska/Threads/LinuxCondVar.hh>
+# include <Vriska/Threads/LinuxCondVar.h>
 #endif // !VRISKA_WINDOWS
 
 namespace Vriska

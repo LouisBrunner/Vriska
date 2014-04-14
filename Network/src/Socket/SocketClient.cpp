@@ -1,5 +1,5 @@
 
-#include <Vriska/Network/SocketClient.hh>
+#include <Vriska/Network/SocketClient.h>
 
 namespace Vriska
 {

@@ -1,5 +1,5 @@
 
-#include <Vriska/Network/WindowsSocket.hh>
+#include <Vriska/Network/WindowsSocket.h>
 
 namespace Vriska
 {

@@ -1,5 +1,5 @@
 
-#include <Vriska/Core/Error.hh>
+#include <Vriska/Core/Error.h>
 
 namespace Vriska
 {

@@ -1,10 +1,10 @@
 
-#include <Vriska/Threads/INativeMutex.hh>
+#include <Vriska/Threads/INativeMutex.h>
 
 #ifdef VRISKA_WINDOWS
-# include <Vriska/Threads/WindowsMutex.hh>
+# include <Vriska/Threads/WindowsMutex.h>
 #else
-# include <Vriska/Threads/LinuxMutex.hh>
+# include <Vriska/Threads/LinuxMutex.h>
 #endif // !VRISKA_WINDOWS
 
 namespace Vriska

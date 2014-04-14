@@ -32,6 +32,22 @@
       <Project>{fb804edb-1f2f-492a-9f43-d2dc530de224}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Vriska\Network.h" />
+    <None Include="..\Vriska\Network\BufferRing.h" />
+    <None Include="..\Vriska\Network\Client.h" />
+    <None Include="..\Vriska\Network\ICallable.h" />
+    <None Include="..\Vriska\Network\INativeSocket.h" />
+    <None Include="..\Vriska\Network\LinuxSocket.h" />
+    <None Include="..\Vriska\Network\Loggers.h" />
+    <None Include="..\Vriska\Network\Server.h" />
+    <None Include="..\Vriska\Network\SimpleClient.h" />
+    <None Include="..\Vriska\Network\Socket.h" />
+    <None Include="..\Vriska\Network\SocketClient.h" />
+    <None Include="..\Vriska\Network\SocketServer.h" />
+    <None Include="..\Vriska\Network\SocketSet.h" />
+    <None Include="..\Vriska\Network\WindowsSocket.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6152A460-41B0-451F-9EE3-A30E5DD6F20C}</ProjectGuid>
     <RootNamespace>Network</RootNamespace>

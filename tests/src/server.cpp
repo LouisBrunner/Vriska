@@ -1,9 +1,9 @@
 
-#include <Vriska/Threads.hh>
-#include <Vriska/Threads.hh>
+#include <Vriska/Threads.h>
+#include <Vriska/Threads.h>
 
-#include <Vriska/Network.hh>
-#include <Vriska/Network.hh>
+#include <Vriska/Network.h>
+#include <Vriska/Network.h>
 
 #include <iostream>
 

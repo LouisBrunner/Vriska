@@ -52,4 +52,62 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Vriska\Threads\CondVar.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Threads\ILockable.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Threads\INativeCondVar.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Threads\INativeMutex.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Threads\INativeThread.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Threads\IRunnable.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Threads\LinuxCondVar.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Threads\LinuxMutex.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Threads\LinuxThread.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Threads\Mutex.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Threads\ScopedLock.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Threads\Thread.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Threads\ThreadPool.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Threads.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Threads\WindowsCondVar.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Threads\WindowsMutex.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Threads\WindowsThread.h">
+      <Filter>Header Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Vriska\Threads\SafeList.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>

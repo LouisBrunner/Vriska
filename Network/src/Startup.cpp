@@ -1,5 +1,5 @@
 
-#include <Vriska/Core/Time.hh>
+#include <Vriska/Core/Time.h>
 #include <Vriska/Core/Exceptions.hpp>
 #include <winsock2.h>
 

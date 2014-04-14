@@ -1,5 +1,5 @@
 
-#include <Vriska/Threads/ThreadPool.hh>
+#include <Vriska/Threads/ThreadPool.h>
 
 #include <iostream>
 

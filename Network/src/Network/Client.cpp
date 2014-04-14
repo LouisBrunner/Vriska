@@ -1,5 +1,5 @@
 
-#include <Vriska/Network/Client.hh>
+#include <Vriska/Network/Client.h>
 
 namespace Vriska
 {

@@ -1,5 +1,5 @@
 
-#include <Vriska/Threads/CondVar.hh>
+#include <Vriska/Threads/CondVar.h>
 
 namespace Vriska
 {

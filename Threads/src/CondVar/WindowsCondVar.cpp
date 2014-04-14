@@ -1,5 +1,5 @@
 
-#include <Vriska/Threads/WindowsCondVar.hh>
+#include <Vriska/Threads/WindowsCondVar.h>
 
 #include <Windows.h>
 

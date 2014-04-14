@@ -1,5 +1,5 @@
 
-#include <Vriska/Threads/WindowsThread.hh>
+#include <Vriska/Threads/WindowsThread.h>
 
 namespace Vriska
 {

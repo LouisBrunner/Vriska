@@ -1,5 +1,5 @@
 
-#include <Vriska/Threads/ScopedLock.hh>
+#include <Vriska/Threads/ScopedLock.h>
 
 namespace Vriska
 {

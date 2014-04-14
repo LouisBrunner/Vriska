@@ -1,5 +1,5 @@
 
-#include <Vriska/Core/OS.hh>
+#include <Vriska/Core/OS.h>
 
 namespace Vriska
 {

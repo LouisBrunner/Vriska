@@ -13,6 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{ECB7AF4F-C5EF-455F-82EC-F9B3384C9284}</ProjectGuid>
     <RootNamespace>testc</RootNamespace>
+    <ProjectName>Test-Client</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">

@@ -1,5 +1,5 @@
 
-#include <Vriska/Threads/WindowsMutex.hh>
+#include <Vriska/Threads/WindowsMutex.h>
 
 namespace Vriska
 {

@@ -57,6 +57,11 @@ namespace Vriska
 				_data = new Data<Type>(data);
 			}
 
+			bool		hasData() const
+			{
+				return (_data != NULL);
+			}
+
 		private:
 			IData*			_data;
 	};

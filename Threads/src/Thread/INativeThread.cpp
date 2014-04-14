@@ -1,10 +1,10 @@
 
-#include <Vriska/Threads/INativeThread.hh>
+#include <Vriska/Threads/INativeThread.h>
 
 #ifdef VRISKA_WINDOWS
-# include <Vriska/Threads/WindowsThread.hh>
+# include <Vriska/Threads/WindowsThread.h>
 #else
-# include <Vriska/Threads/LinuxThread.hh>
+# include <Vriska/Threads/LinuxThread.h>
 #endif // !VRISKA_WINDOWS
 
 namespace Vriska

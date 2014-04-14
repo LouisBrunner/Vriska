@@ -1,6 +1,6 @@
 
-#include <Vriska/Network/SocketServer.hh>
-#include <Vriska/Network/Server.hh>
+#include <Vriska/Network/SocketServer.h>
+#include <Vriska/Network/Server.h>
 
 namespace Vriska
 {

@@ -1,8 +1,8 @@
 
-#include <Vriska/Network/Server.hh>
+#include <Vriska/Network/Server.h>
 
 // Forward declaration completion
-#include <Vriska/Network/ICallable.hh>
+#include <Vriska/Network/ICallable.h>
 
 namespace Vriska
 {
