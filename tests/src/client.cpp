@@ -330,7 +330,7 @@ static int	launchNC(Vriska::Client& client, std::string const & host, unsigned i
 	return (0);
 }
 
-static void       sendFile(Vriska::Client& client, std::string const & path)
+static void			sendFile(Vriska::Client& client, std::string const & path)
 {
 	std::string     line;
 	std::streamsize ret;
@@ -349,7 +349,7 @@ static void       sendFile(Vriska::Client& client, std::string const & path)
 			if (ret > 0)
 				if (client.write(&line[0], static_cast<size_t>(ret)) != ret)
 					break;
-		} while (ifs.good() && !ifs.eof() && size == ret);
+		} while (ifs.good() && !ifs.eof() && static_cast<std::streamsize>(size) == ret);
 	}
 	std::cout << "complete" << std::endl;
 }

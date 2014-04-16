@@ -121,7 +121,7 @@ namespace Vriska
       {
         sock = reinterpret_cast<WindowsSocket const *>(*it)->_sock;
         FD_SET(sock, &nset);
-        max = std::max<int>(static_cast<const int>(sock), static_cast<const int>(max));
+        max = std::max<SOCKET>(sock, max);
       }
   }
 
