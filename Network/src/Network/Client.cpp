@@ -306,17 +306,17 @@ namespace Vriska
       return (SimpleClient::read(buffer, size));
     else
       {
-	char			*cbuff = static_cast<char *>(buffer);
-	int				ret;
-	unsigned int	idx = 0;
+        char          *cbuff = static_cast<char *>(buffer);
+        int           ret;
+        size_t        idx = 0;
 
-	do
-	  {
-	    ret = recv(&cbuff[idx], size - idx, true);
-	    if (ret > 0)
-	      idx += ret;
-	  } while (ret > 0 && idx < size);
-	return (ret > 0 ? size : Socket::Error);
+        do
+          {
+            ret = recv(&cbuff[idx], size - idx, true);
+            if (ret > 0)
+              idx += ret;
+          } while (ret > 0 && idx < size);
+        return (ret > 0 ? static_cast<int>(idx) : Socket::Error);
       }
   }
 
@@ -336,14 +336,14 @@ namespace Vriska
       return (SimpleClient::read(buffer, size));
     else
       {
-	int		ret;
+        int		ret;
 
-	buffer.resize(size, 0);
-	memset(&buffer[0], 0, size);
-	ret = read(&buffer[0], size);
-	if (ret > -1)
-	  buffer.resize(ret, 0);
-	return (ret);
+        buffer.resize(size, 0);
+        memset(&buffer[0], 0, size);
+        ret = read(&buffer[0], size);
+        if (ret > -1)
+          buffer.resize(ret, 0);
+        return (ret);
       }
   }
 
@@ -424,17 +424,17 @@ namespace Vriska
       return (SimpleClient::write(buffer, size));
     else
       {
-	char const		*cbuff = static_cast<char const *>(buffer);
-	int				ret;
-	unsigned int	idx = 0;
+        char const      *cbuff = static_cast<char const *>(buffer);
+        int             ret;
+        size_t          idx = 0;
 
-	do
-	  {
-	    ret = send(&cbuff[idx], size - idx, true);
-	    if (ret > 0)
-	      idx += ret;
-	  } while (ret > 0 && idx < size);
-	return (ret > 0 ? size : Socket::Error);
+        do
+          {
+            ret = send(&cbuff[idx], size - idx, true);
+            if (ret > 0)
+              idx += ret;
+          } while (ret > 0 && idx < size);
+        return (ret > 0 ? static_cast<int>(idx) : Socket::Error);
       }
   }
 

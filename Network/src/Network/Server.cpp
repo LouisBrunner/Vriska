@@ -588,7 +588,7 @@ namespace Vriska
   }
 
   VRISKA_ACCESSIBLE
-  unsigned int	Server::broadcast(void const * buffer, unsigned int size)
+  size_t  Server::broadcast(void const * buffer, size_t size)
   {
     return (broadcast(buffer, size, &yesMan));
   }
