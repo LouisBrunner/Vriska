@@ -1,5 +1,5 @@
 
-#include <Vriska/Threads/LinuxThread.hh>
+#include <Vriska/Threads/LinuxThread.h>
 
 #include <iostream>
 

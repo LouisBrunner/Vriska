@@ -1,5 +1,5 @@
 
-#include <Vriska/Threads/LinuxCondVar.hh>
+#include <Vriska/Threads/LinuxCondVar.h>
 
 namespace Vriska
 {

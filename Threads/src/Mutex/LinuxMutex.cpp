@@ -1,5 +1,5 @@
 
-#include <Vriska/Threads/LinuxMutex.hh>
+#include <Vriska/Threads/LinuxMutex.h>
 
 namespace Vriska
 {
