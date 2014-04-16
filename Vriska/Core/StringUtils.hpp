@@ -6,7 +6,6 @@
 # include <sstream>
 # include <vector>
 # include <iomanip>
-# include <limits>
 
 namespace Vriska
 {
@@ -55,15 +54,17 @@ namespace Vriska
       res = replaceAll(res, "\\", "\\\\");
       res = replaceAll(res, "\n", "\\n");
       res = replaceAll(res, "\t", "\\t");
-      for (int c = 0; c < std::numeric_limits<char>::max(); ++c)
+      for (char c = 0; true; ++c)
 	{
 	  if (!isprint(c))
 	    {
 	      oss.str("");
 	      oss << std::setfill('0') << std::setw(2)
-		  << std::hex << c;
-        res = replaceAll(res, std::string(reinterpret_cast<char*>(&c), 1), "\\" + oss.str());
+		  << std::hex << static_cast<int>(c);
+	      res = replaceAll(res, std::string(&c, 1), "\\" + oss.str());
 	    }
+	  if (c == 127)
+	    break;
 	}
       return (res);
     }
