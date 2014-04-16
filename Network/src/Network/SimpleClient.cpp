@@ -127,7 +127,7 @@ namespace Vriska
     Error::Code		err = Error::NoError;
     std::string		all;
     char		*buffer = new char[SizeBuffer];
-    int			ret;
+    int			ret = -1;
     unsigned int	size;
     unsigned int	left;
 
@@ -162,7 +162,7 @@ namespace Vriska
   {
     std::string		all;
     char			*buffer = new char[SizeBuffer];
-    int				ret;
+    int				ret = -1;
     unsigned int	size;
     unsigned int	used;
 

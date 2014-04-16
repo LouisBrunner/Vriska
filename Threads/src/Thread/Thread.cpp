@@ -45,7 +45,8 @@ namespace Vriska
 
     if (_launched)
       return (false);
-    if ((ret = _thread.launch(run)))
+    ret = _thread.launch(run);
+    if (ret)
       _launched = true;
     return (ret);
   }
@@ -58,7 +59,8 @@ namespace Vriska
 
     if (!_launched)
       return (false);
-    if ((ret = _thread.join()))
+    ret = _thread.join();
+    if (ret)
       _launched = false;
     return (ret);
   }

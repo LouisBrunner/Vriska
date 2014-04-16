@@ -56,7 +56,7 @@ namespace Vriska
       return (Error::NoSocket);
     memset(&_sa, 0, sizeof(_sa));
     _sa.sin_family = AF_INET;
-    _sa.sin_port = htons(port);
+    _sa.sin_port = htons(static_cast<u_short>(port));
     if ((he = gethostbyname(host.c_str())) == NULL || he->h_length < 1)
       return (Error::UnknowHost);
     memcpy(&_sa.sin_addr, he->h_addr, he->h_length);
@@ -74,7 +74,7 @@ namespace Vriska
       return (Error::NoSocket);
     memset(&_sa, 0, sizeof(_sa));
     _sa.sin_family = AF_INET;
-    _sa.sin_port = htons(port);
+    _sa.sin_port = htons(static_cast<u_short>(port));
     if (host == "")
       _sa.sin_addr.s_addr = htonl(INADDR_ANY);
     else

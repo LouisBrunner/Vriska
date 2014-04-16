@@ -10,6 +10,8 @@ namespace Vriska
 
 BOOLEAN WINAPI DllMain(IN HINSTANCE hDllHandle, IN DWORD nReason, IN LPVOID Reserved)
 {
+  static_cast<void>(hDllHandle);
+  static_cast<void>(Reserved);
   switch (nReason)
     {
     case DLL_PROCESS_ATTACH:
@@ -18,7 +20,6 @@ BOOLEAN WINAPI DllMain(IN HINSTANCE hDllHandle, IN DWORD nReason, IN LPVOID Rese
       if (WSAStartup(MAKEWORD(2, 2), &wsa) < 0)
 	{
 	  throw Vriska::UnrecoverableIncidentException("Cannot init WindowsSocketAPI");
-	  return (FALSE);
 	}
       break;
     case DLL_PROCESS_DETACH:

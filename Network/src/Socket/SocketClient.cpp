@@ -109,7 +109,7 @@ namespace Vriska
   int			SocketClient::send(void const *buffer, size_t size, bool log)
   {
     ScopedLock		lock(_mutex);
-    int			ret;
+    int			ret = -1;
 
     if (!_connected)
       return (Error::NotConnected);
