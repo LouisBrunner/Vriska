@@ -330,12 +330,12 @@ static int	launchNC(Vriska::Client& client, std::string const & host, unsigned i
 	return (0);
 }
 
-static void			sendFile(Vriska::Client& client, std::string const & path)
+static void       sendFile(Vriska::Client& client, std::string const & path)
 {
-	std::string		line;
-	int				ret;
-	unsigned int	size = 50000;
-	std::ifstream	ifs;
+	std::string     line;
+	std::streamsize ret;
+	size_t          size = 50000;
+	std::ifstream   ifs;
 
 	std::cout << "sending " << path << " ..." << std::endl;
 	ifs.open(path.c_str());
@@ -347,9 +347,9 @@ static void			sendFile(Vriska::Client& client, std::string const & path)
 			ifs.read(&line[0], size);
 			ret = ifs.gcount();
 			if (ret > 0)
-				if (client.write(&line[0], ret) != ret)
+				if (client.write(&line[0], static_cast<size_t>(ret)) != ret)
 					break;
-		} while (ifs.good() && !ifs.eof() && static_cast<int>(size) == ret);
+		} while (ifs.good() && !ifs.eof() && size == ret);
 	}
 	std::cout << "complete" << std::endl;
 }

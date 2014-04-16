@@ -119,9 +119,9 @@ namespace Vriska
     FD_ZERO(&nset);
     for (SocketSet::Iter it = set.begin(); it != set.end(); ++it)
       {
-	sock = reinterpret_cast<WindowsSocket const *>(*it)->_sock;
-	FD_SET(sock, &nset);
-	max = std::max<int>(sock, max);
+        sock = reinterpret_cast<WindowsSocket const *>(*it)->_sock;
+        FD_SET(sock, &nset);
+        max = std::max<int>(static_cast<const int>(sock), static_cast<const int>(max));
       }
   }
 
@@ -139,13 +139,13 @@ namespace Vriska
       }
   }
     
-  Error::Code		WindowsSocket::select(SocketSet& read, SocketSet& write, Time* timeout, bool* hasStdin)
+  Error::Code       WindowsSocket::select(SocketSet& read, SocketSet& write, Time* timeout, bool* hasStdin)
   {
-    ScopedLock		lock(_mutex);
-    SOCKET		max = INVALID_SOCKET;
-    fd_set		fread;
-    fd_set		fwrite;
-    struct timeval	ntime;
+    ScopedLock      lock(_mutex);
+    SOCKET          max = INVALID_SOCKET;
+    fd_set          fread;
+    fd_set          fwrite;
+    struct timeval  ntime;
     int			ret;
 
     setSockets(read, fread, max);
@@ -154,20 +154,20 @@ namespace Vriska
       timeout->toTimeval(ntime);
     if (hasStdin != NULL)
       *hasStdin = false;
-    ret = ::select(max + 1, &fread, &fwrite, NULL, timeout != NULL ? &ntime : NULL);
+    ret = ::select(static_cast<int>(max) + 1, &fread, &fwrite, NULL, timeout != NULL ? &ntime : NULL);
     if (ret == -1)
       {
-	read.clear();
-	write.clear();
-	if (timeout != NULL)
-	  timeout->setAll(0, 0);
+        read.clear();
+        write.clear();
+        if (timeout != NULL)
+          timeout->setAll(0, 0);
       }
     else
       {
-	if (timeout != NULL && ret != 0)
-	  *timeout -= Time::fromSTimeval(ntime);
-	removeSockets(read, fread);
-	removeSockets(write, fwrite);
+        if (timeout != NULL && ret != 0)
+          *timeout -= Time::fromSTimeval(ntime);
+        removeSockets(read, fread);
+        removeSockets(write, fwrite);
       }
     return (Error::NoError);
   }    

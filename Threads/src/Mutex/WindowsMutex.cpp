@@ -21,7 +21,7 @@ namespace Vriska
 
   bool	WindowsMutex::tryLock()
   {
-    return (TryEnterCriticalSection(&_mutex));
+    return (TryEnterCriticalSection(&_mutex) == TRUE);
   }
 
   bool	WindowsMutex::unlock()
