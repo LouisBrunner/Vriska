@@ -83,10 +83,16 @@ namespace Vriska
     std::stringstream	oss;
     char		buffer[SizeBufferDate];
     time_t		t;
+	struct tm	tm;
 
     t = time(NULL);
     memset(buffer, 0, SizeBufferDate);
-    strftime(buffer, SizeBufferDate, "%d/%m/%y %H:%M:%S", localtime(&t));
+#ifdef VRISKA_WINDOWS
+	localtime_s(&tm, &t);
+#else // !VRISKA_WINDOWS
+	localtime_r(&t, &tm);
+#endif // !VRISKA_WINDOWS
+    strftime(buffer, SizeBufferDate, "%d/%m/%y %H:%M:%S", &tm);
     oss << "[" << buffer << "]";
     return (oss.str());
   }
