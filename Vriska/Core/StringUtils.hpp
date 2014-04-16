@@ -138,7 +138,7 @@ namespace Vriska
     }
 
     template <class Type>
-    static std::string		toBytes(Type n, bool toBig = true)
+    static std::string		toEndianess(Type n, bool toBig = true)
     {
       char			byte;
       std::string		bytes;
@@ -156,14 +156,14 @@ namespace Vriska
     }
 
     template <class Type>
-    static Type			fromBytes(std::string const & bytes, bool toBig = true)
+    static Type			fromEndianess(std::string const & bytes, bool fromBig = true)
     {
       Type			n = 0;
       unsigned int		max = sizeof(Type);
       
       for (unsigned int i = 0; i < max && i < bytes.size(); ++i)
 	{
-	  if ((isBigEndian() && toBig) || (!isBigEndian() && !toBig))
+	  if ((isBigEndian() && fromBig) || (!isBigEndian() && !fromBig))
 	    n |= (bytes[i] << (i * 8));
 	  else
 	    n |= ((bytes[i] & 0xFF) << ((max - i - 1) * 8));
