@@ -13,6 +13,13 @@
 #  define VRISKA_EXPORT
 # endif // !__MINGW32__ || _WIN32
 
+# ifdef VRISKA_WINDOWS
+#  pragma warning( push )
+#  pragma warning( disable : 4127 )
+#  pragma warning( disable : 4251 )
+#  pragma warning( disable : 4275 )
+# endif
+
 namespace Vriska
 {
   class OS
