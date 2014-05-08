@@ -2,7 +2,7 @@
 #ifndef VRISKA_LIB_CORE_DATA_HPP_
 # define VRISKA_LIB_CORE_DATA_HPP_
 
-# include <Vriska/Core/Exceptions.hpp>
+# include <Vriska/Core/Exceptions.h>
 
 namespace Vriska
 {
@@ -44,7 +44,7 @@ namespace Vriska
 			template <class Type>
 			Type		getData()
 			{
-				if (_data == NULL)
+                if (!hasData())
 					throw UnsupportedBehaviorException("You cannot retrieve Data before setting it");
 				return (reinterpret_cast<Data<Type> *>(_data)->getData());
 			}

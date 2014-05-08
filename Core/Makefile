@@ -14,7 +14,10 @@ CXXFLAGS	+=	-I$(DIR_INCLUDE)
 BINFLAGS	+=	-shared -fPIC
 
 SRC		=	$(DIR_SOURCE)/Error.cpp			\
+			$(DIR_SOURCE)/Exceptions.cpp	\
+			$(DIR_SOURCE)/StringUtils.cpp	\
 			$(DIR_SOURCE)/Time.cpp			\
+			$(DIR_SOURCE)/Utils.cpp			\
 			$(DIR_SOURCE)/OS.cpp
 
 OBJ		=	$(SRC:.cpp=.o)

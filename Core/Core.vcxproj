@@ -130,8 +130,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Error.cpp" />
+    <ClCompile Include="src\Exceptions.cpp" />
     <ClCompile Include="src\OS.cpp" />
+    <ClCompile Include="src\StringUtils.cpp" />
     <ClCompile Include="src\Time.cpp" />
+    <ClCompile Include="src\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Vriska\Core.h" />
@@ -141,7 +144,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Vriska\Core\Data.hpp" />
-    <ClInclude Include="..\Vriska\Core\Exceptions.hpp" />
+    <ClInclude Include="..\Vriska\Core\Exceptions.h" />
     <ClInclude Include="..\Vriska\Core\StringUtils.hpp" />
     <ClInclude Include="..\Vriska\Core\Utils.hpp" />
   </ItemGroup>

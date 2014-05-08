@@ -3,7 +3,7 @@
 # define VRISKA_LIB_NETWORK_SIMPLECLIENT_H_
 
 # include <Vriska/Core/Data.hpp>
-# include <Vriska/Core/Exceptions.hpp>
+# include <Vriska/Core/Exceptions.h>
 # include <Vriska/Network/SocketClient.h>
 # include <Vriska/Network/BufferRing.h>
 

@@ -3,43 +3,22 @@
 # define VRISKA_LIB_CORE_UTILS_HPP_
 
 # include <string>
+# include <Vriska/Core/OS.h>
 # include <Vriska/Core/StringUtils.hpp>
 
 namespace Vriska
 {
-  class Utils
+  class VRISKA_EXPORT Utils
   {
   private:
     Utils(); // static class
 
   public:
-    static char     getPathSeparator()
-    {
-# ifdef VRISKA_WINDOWS
-        return '\\';
-# else
-        return '/';
-# endif // !VRISKA_WINDOWS
-    }
+    static char     getPathSeparator();
+    static std::string  pathToNative(std::string const & path, char separator = '/');
 
-    static std::string  pathToNative(std::string const & path, char separator = '/')
-    {
-        char nativeSeparator = getPathSeparator();
-
-        if (separator == nativeSeparator)
-            return path;
-        return StringUtils::replaceAll(path, separator, nativeSeparator);
-    }
-
-    static bool		isBigEndian()
-    {
-      int		i;
-      char		*tab;
-
-      i = 1;
-      tab = (char *) &i;
-      return (tab[0] == 0);
-    }
+    static bool		isBigEndian();
+    static char		toByte(int n);
 
     template <class Type>
     static std::string		toEndianess(Type n, bool toBig = true)
@@ -73,11 +52,6 @@ namespace Vriska
 	    n |= ((bytes[i] & 0xFF) << ((max - i - 1) * 8));
 	}
       return (n);
-    }
-
-    static char		toByte(int n)
-    {
-      return (static_cast<char>(n));
     }
   };
 }

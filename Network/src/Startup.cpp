@@ -1,6 +1,6 @@
 
 #include <Vriska/Core/Time.h>
-#include <Vriska/Core/Exceptions.hpp>
+#include <Vriska/Core/Exceptions.h>
 #include <winsock2.h>
 
 namespace Vriska
