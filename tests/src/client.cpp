@@ -528,6 +528,7 @@ int		main(int ac, char **av)
 	if (test(ac, av))
 	{
 		std::cout << "An error occured." << std::endl;
+        std::cout << Vriska::Time::Zero << std::endl;
 		return (1);
 	}
 	return (0);

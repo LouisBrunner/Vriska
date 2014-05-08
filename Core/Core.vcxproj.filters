@@ -49,5 +49,8 @@
     <ClInclude Include="..\Vriska\Core\StringUtils.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\Vriska\Core\Utils.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
