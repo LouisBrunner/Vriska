@@ -1,5 +1,6 @@
 
 #include <Vriska/Threads/INativeMutex.h>
+#include <Vriska/Core/Utils.hpp>
 
 #ifdef VRISKA_WINDOWS
 # include <Vriska/Threads/WindowsMutex.h>
@@ -9,12 +10,13 @@
 
 namespace Vriska
 {
-  INativeMutex*	INativeMutex::create()
+  INativeMutex*	INativeMutex::create(bool recursive)
   {
 #ifdef VRISKA_WINDOWS
+    Utils::ignore(recursive);
     return (new WindowsMutex());
 #else
-    return (new LinuxMutex());
+    return (new LinuxMutex(recursive));
 #endif // !VRISKA_WINDOWS
   }
 }

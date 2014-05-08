@@ -24,6 +24,9 @@ namespace Vriska
     bool	unlock();
 
   public:
+    bool  isRecursive() const;
+
+  public:
     void*	getNative();
 
   private:

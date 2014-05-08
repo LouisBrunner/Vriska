@@ -32,9 +32,9 @@ Vriska:
 clean:
 		$(RM) $(OBJ_C) $(OBJ_S)
 
-fclean:		clean
-		$(RM) $(NAME_C) $(NAME_S) $(LIB)
+distclean:		clean
+		$(RM) $(NAME_C) $(NAME_S)
 
-re:		fclean all
+re:		distclean all
 
-.PHONY:		all clean fclean re Vriska
+.PHONY:		all clean distclean re Vriska

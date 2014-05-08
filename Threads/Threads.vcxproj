@@ -172,7 +172,7 @@
     <None Include="..\Vriska\Threads\WindowsThread.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Vriska\Threads\SafeList.hpp" />
+    <ClInclude Include="..\Vriska\Threads\SafeObject.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

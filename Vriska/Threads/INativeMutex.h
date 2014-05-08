@@ -13,10 +13,13 @@ namespace Vriska
     virtual ~INativeMutex() {}
 
   public:
+    virtual bool    isRecursive() const = 0;
+
+  public:
     virtual void*	getNative() = 0;
 
   public:
-    static INativeMutex*	create();
+    static INativeMutex*	create(bool recursive);
   };
 }
 

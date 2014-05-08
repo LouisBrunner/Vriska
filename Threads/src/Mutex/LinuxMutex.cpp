@@ -3,14 +3,19 @@
 
 namespace Vriska
 {
-  LinuxMutex::LinuxMutex()
+  LinuxMutex::LinuxMutex(bool recursive) : _recursive(recursive)
   {
-    pthread_mutex_init(&_mutex, NULL);
+	pthread_mutexattr_init(&_attr);
+	if (recursive)
+		pthread_mutexattr_settype(&_attr, PTHREAD_MUTEX_RECURSIVE);
+	
+    pthread_mutex_init(&_mutex, &_attr);
   }
 
   LinuxMutex::~LinuxMutex()
   {
     pthread_mutex_destroy(&_mutex);
+	pthread_mutexattr_destroy(&_attr);
   }
 
   bool	LinuxMutex::lock()
@@ -26,6 +31,11 @@ namespace Vriska
   bool	LinuxMutex::unlock()
   {
     return (pthread_mutex_unlock(&_mutex) == 0);
+  }
+
+  bool	LinuxMutex::isRecursive() const
+  {
+    return (_recursive);
   }
 
   void*	LinuxMutex::getNative()

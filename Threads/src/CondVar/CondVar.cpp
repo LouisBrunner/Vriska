@@ -38,6 +38,12 @@ namespace Vriska
   }
 
   VRISKA_ACCESSIBLE
+  bool	CondVar::isRecursive() const
+  {
+    return (_condvar.isRecursive());
+  }
+
+  VRISKA_ACCESSIBLE
   bool	CondVar::notify(bool lock)
   {
     return (_condvar.notify(lock));

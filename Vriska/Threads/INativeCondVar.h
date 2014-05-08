@@ -17,7 +17,7 @@ namespace Vriska
     static const Result	Failed = 1;
 
   public:
-    INativeCondVar(INativeMutex* mutex = NULL);
+    INativeCondVar(INativeMutex* mutex = NULL, bool recursive = true);
     virtual ~INativeCondVar();
 
   private:
@@ -40,6 +40,9 @@ namespace Vriska
   protected:
     bool		ownLock();
     bool		ownUnlock();
+    
+  public:
+      bool  isRecursive() const;
 
   protected:
     INativeMutex&	_mutex;

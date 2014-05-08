@@ -33,7 +33,7 @@ clean:
 		$(MAKE) -C $(DIR_N) $@
 		$(MAKE) -C $(DIR_TST) $@
 
-fclean:
+distclean:
 		$(MAKE) -C $(DIR_C) $@
 		$(MAKE) -C $(DIR_T) $@
 		$(MAKE) -C $(DIR_N) $@
@@ -42,9 +42,9 @@ fclean:
 		$(RM) $(NAME_T)
 		$(RM) $(NAME_N)
 
-re:		fclean all
+re:		distclean all
 
 $(DIR_TST):
 		$(MAKE) -C $@ re
 
-.PHONY:		all clean fclean re $(DIR_TST)
+.PHONY:		all clean distclean re $(DIR_TST)

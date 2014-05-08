@@ -9,7 +9,7 @@
 
 namespace Vriska
 {
-  INativeCondVar::INativeCondVar(INativeMutex* mutex) : _mutex(mutex == NULL ? *INativeMutex::create() : *mutex), _own(mutex == NULL)
+  INativeCondVar::INativeCondVar(INativeMutex* mutex, bool recursive) : _mutex(mutex == NULL ? *INativeMutex::create(recursive) : *mutex), _own(mutex == NULL)
   {
   }
 
@@ -55,5 +55,10 @@ namespace Vriska
     if (_own)
       return (_mutex.unlock());
     return (true);
+  }
+
+  bool  INativeCondVar::isRecursive() const
+  {
+      return (_mutex.isRecursive());
   }
 }

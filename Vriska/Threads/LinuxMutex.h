@@ -11,7 +11,7 @@ namespace Vriska
   class LinuxMutex : public INativeMutex
   {
   public:
-    LinuxMutex();
+    LinuxMutex(bool recursive);
     ~LinuxMutex();
 
   private:
@@ -24,10 +24,15 @@ namespace Vriska
     bool	unlock();
 
   public:
+    bool  isRecursive() const;
+
+  public:
     void*	getNative();
 
   private:
+    bool            _recursive;
     pthread_mutex_t	_mutex;
+    pthread_mutexattr_t _attr;
   };
 }
 

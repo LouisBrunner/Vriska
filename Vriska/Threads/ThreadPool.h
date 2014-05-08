@@ -5,7 +5,7 @@
 # include <Vriska/Threads/Thread.h>
 # include <Vriska/Threads/Mutex.h>
 # include <Vriska/Threads/CondVar.h>
-# include <Vriska/Threads/SafeList.hpp>
+# include <Vriska/Threads/SafeObject.hpp>
 # include <Vriska/Threads/ScopedLock.h>
 # include <vector>
 

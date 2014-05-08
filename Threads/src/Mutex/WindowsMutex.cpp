@@ -30,6 +30,11 @@ namespace Vriska
     return (true);
   }
 
+  bool	WindowsMutex::isRecursive() const
+  {
+    return (true);
+  }
+
   void*	WindowsMutex::getNative()
   {
     return (&_mutex);

@@ -53,6 +53,12 @@ namespace Vriska
 	}
       return (n);
     }
+
+    template <class Type>
+    static void    ignore(Type t)
+    {
+        static_cast<void>(t);
+    }
   };
 }
 

@@ -38,7 +38,7 @@ namespace Vriska
   {
     ScopedLock		lock(_list);
 
-    _list.push_back(run);
+    _list->push_back(run);
     return (true);
   }
 
@@ -53,14 +53,15 @@ namespace Vriska
       {
 	_mutex.unlock();
 	_list.lock();
-	if (_list.empty())
+	if (_list->empty())
 	  {
 	    _list.wait();
 	    _list.unlock();
 	  }
 	else
 	  {
-	    run = _list.pop_front();
+        run = _list->front();
+        (*_list).pop_front();
 	    _list.unlock();
 	    run->run();
 	  }

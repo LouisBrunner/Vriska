@@ -10,7 +10,7 @@ namespace Vriska
   class VRISKA_EXPORT Mutex : public ILockable
   {
   public:
-    Mutex();
+    Mutex(bool recursive = true);
     virtual ~Mutex();
 
   private:
@@ -21,6 +21,9 @@ namespace Vriska
     virtual bool	lock();
     virtual bool	tryLock();
     virtual bool	unlock();
+
+  public:
+    bool    isRecursive() const;
 
   public:
     virtual INativeMutex&	getNative();

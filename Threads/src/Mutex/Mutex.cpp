@@ -4,7 +4,7 @@
 namespace Vriska
 {
   VRISKA_ACCESSIBLE
-  Mutex::Mutex() : _mutex(*INativeMutex::create())
+  Mutex::Mutex(bool recursive) : _mutex(*INativeMutex::create(recursive))
   {
   }
 
@@ -30,6 +30,12 @@ namespace Vriska
   bool	Mutex::unlock()
   {
     return (_mutex.unlock());
+  }
+
+  VRISKA_ACCESSIBLE
+  bool	Mutex::isRecursive() const
+  {
+    return (_mutex.isRecursive());
   }
 
   INativeMutex&	Mutex::getNative()

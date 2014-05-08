@@ -38,9 +38,9 @@ all:		$(NAME)
 clean:
 		$(RM) $(OBJ)
 
-fclean:		clean
+distclean:		clean
 		$(RM) $(NAME)
 
-re:		fclean all
+re:		distclean all
 
-.PHONY:		all clean fclean re
+.PHONY:		all clean distclean re

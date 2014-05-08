@@ -32,6 +32,8 @@ namespace Vriska
     virtual bool	tryLock();
     virtual bool	unlock();
 
+    virtual bool    isRecursive() const;
+
     virtual bool	notify(bool lock = true);
     virtual bool	notifyAll(bool lock = true);
     virtual Result	wait(Time const & timeout = Time::Zero, bool lock = true);
