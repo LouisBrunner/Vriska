@@ -12,10 +12,13 @@ namespace Vriska
 	class VRISKA_EXPORT Exception : public std::exception
 	{
 		public:
-			Exception(std::string const & message = "An exception occured");
-			virtual ~Exception() throw();
+			Exception(std::string const & message = "An exception occured") : _message(message) {}
+			virtual ~Exception() throw() {}
 
-			const char* what() const throw();
+			const char* what() const throw()
+			{
+			  return (_message.c_str());
+			}
 
 		private:
 			std::string	_message;

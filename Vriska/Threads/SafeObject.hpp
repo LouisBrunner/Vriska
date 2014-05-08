@@ -6,6 +6,7 @@
 # include <Vriska/Threads/CondVar.h>
 # include <Vriska/Threads/ILockable.h>
 # include <Vriska/Threads/Mutex.h>
+# include <Vriska/Threads/ScopedLock.h>
 
 # include <vector>
 # include <deque>
