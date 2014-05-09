@@ -171,6 +171,7 @@ namespace Vriska
         (*it)->enableLogging(logging);
   }
   
+  VRISKA_ACCESSIBLE
   void  Server::enableSysLogging(bool sysLogging)
   {
     Logger::enableSysLogging(sysLogging);
@@ -178,6 +179,7 @@ namespace Vriska
         (*it)->enableSysLogging(sysLogging);
   }
 
+  VRISKA_ACCESSIBLE
   void  Server::setLoggingStream(std::ostream& os)
   {
     Logger::setLoggingStream(os);
@@ -185,6 +187,7 @@ namespace Vriska
         (*it)->setLoggingStream(os);
   }
 
+  VRISKA_ACCESSIBLE
   void  Server::setLoggingTag(std::string const & tag)
   {
     Logger::setLoggingTag(tag);
