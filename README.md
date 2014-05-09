@@ -40,8 +40,3 @@ It shows how to properly build on Linux (Makefile) and Windows (Solution and pro
 
 Moreover, it explains how to implements a basic server and a lot of the client features.
 
-
-Known bugs
-==========
-
-* Vriska::Time::Zero doesn't work on Windows (it doesn't compile actually)
