@@ -90,7 +90,7 @@ namespace Vriska
     void			forAll(Func func)
     {
       for (Iter it = _clients.begin(); it != _clients.end(); ++it)
-        (*func)(*this, *it);
+        (*func)(*this, *(*it));
     }
 
   public:
