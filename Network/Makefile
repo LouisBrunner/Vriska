@@ -15,7 +15,7 @@ CXXFLAGS	+=	-I$(DIR_INCLUDE)
 BINFLAGS	+=	-shared -fPIC
 BINFLAGS	+=	-L$(DIR_LIB) -lVriskaCore -lVriskaThreads -Wl,-rpath,`pwd`/$(DIR_LIB)
 
-SRC		=	$(DIR_SOURCE)/Core/Loggers.cpp			\
+SRC		=	$(DIR_SOURCE)/Core/Logger.cpp			\
 			$(DIR_SOURCE)/Core/BufferRing.cpp		\
 			$(DIR_SOURCE)/Socket/INativeSocket.cpp		\
 			$(DIR_SOURCE)/Socket/LinuxSocket.cpp		\

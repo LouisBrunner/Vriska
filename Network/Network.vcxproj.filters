@@ -21,9 +21,6 @@
     <ClCompile Include="src\Core\BufferRing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\Loggers.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Network\Client.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -51,6 +48,9 @@
     <ClCompile Include="src\Socket\WindowsSocket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\Logger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Vriska\Network\BufferRing.h">
@@ -66,9 +66,6 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="..\Vriska\Network\LinuxSocket.h">
-      <Filter>Header Files</Filter>
-    </None>
-    <None Include="..\Vriska\Network\Loggers.h">
       <Filter>Header Files</Filter>
     </None>
     <None Include="..\Vriska\Network.h">
@@ -93,6 +90,9 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="..\Vriska\Network\WindowsSocket.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Network\Logger.h">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>

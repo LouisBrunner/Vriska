@@ -5,13 +5,14 @@ namespace Vriska
 {
   VRISKA_ACCESSIBLE
   Client::Client(Socket::Protocol protocol) :
-    _logger(false), _isBlocking(false),
+    _isBlocking(false),
     _tried(false), _port(0), _timeExact(true),
-    _callRead(NULL), _funcRead(NULL),
-    _callWrite(NULL), _funcWrite(NULL),
+    _callReceive(NULL), _funcReceive(NULL),
+    _callSend(NULL), _funcSend(NULL),
     _callStdin(NULL), _funcStdin(NULL),
     _callTime(NULL), _funcTime(NULL)
   {
+    setLoggingTag("Client " + StringUtils::toString(this));
     setProtocol(protocol);
   }
 
@@ -56,24 +57,6 @@ namespace Vriska
   }
 
   VRISKA_ACCESSIBLE
-  void			Client::log(std::string const & info)
-  {
-    _logger.userLog(info);
-  }
-
-  void			Client::sysLog(std::string const & info)
-  {
-    _logger.log(info);
-  }
-
-  VRISKA_ACCESSIBLE
-  void			Client::setLogging(bool val, std::ostream& os)
-  {
-    _logger.enable(val);
-    _logger.setStream(os);
-  }
-
-  VRISKA_ACCESSIBLE
   void			Client::setBlocking(bool val)
   {
     if (_isBlocking != val)
@@ -95,7 +78,7 @@ namespace Vriska
   }
 
   VRISKA_ACCESSIBLE
-  Error::Code		Client::waitUntilWritten(bool callBack, bool timeOut)
+  Error::Code		Client::waitUntilSent(bool callBack, bool timeOut)
   {
     Error::Code	err = Error::NoError;
 
@@ -167,21 +150,21 @@ namespace Vriska
 
 	if (read.hasSocket(&_socket))
 	  {
-	    if ((err = doRead()) != Error::NoError)
+	    if ((err = doReceive()) != Error::NoError)
 	      {
 		if (err != Error::NoPlaceR)
 		  return (err);
 	      }
 	    if (callBack)
-	      if (!callbackRead())
+	      if (!callbackReceive())
 		return (Error::Disconnected);
 	  }
 	if (write.hasSocket(&_socket))
 	  {
-	    if ((err = doWrite()) != Error::NoError)
+	    if ((err = doSend()) != Error::NoError)
 	      return (err);
 	    if (callBack)
-	      if (!callbackWrite())
+	      if (!callbackSend())
 		return (Error::Disconnected);
 	  }
 	if (timeOut && hasTimeout())
@@ -204,45 +187,45 @@ namespace Vriska
   }
 
   VRISKA_ACCESSIBLE
-  void			Client::registerOnRead(Function func)
+  void			Client::registerOnReceive(Function func)
   {
-    _funcRead = func;
-    _callRead = NULL;
+    _funcReceive = func;
+    _callReceive = NULL;
   }
 
   VRISKA_ACCESSIBLE
-  void			Client::registerOnRead(IClientCallable *call)
+  void			Client::registerOnReceive(IClientCallable *call)
   {
-    _funcRead = NULL;
-    _callRead = call;
+    _funcReceive = NULL;
+    _callReceive = call;
   }
 
   VRISKA_ACCESSIBLE
-  void			Client::unregisterOnRead()
+  void			Client::unregisterOnReceive()
   {
-    _funcRead = NULL;
-    _callRead = NULL;
+    _funcReceive = NULL;
+    _callReceive = NULL;
   }
 
   VRISKA_ACCESSIBLE
-  void			Client::registerOnWrite(Function func)
+  void			Client::registerOnSend(Function func)
   {
-    _funcWrite = func;
-    _callWrite = NULL;
+    _funcSend = func;
+    _callSend = NULL;
   }
 
   VRISKA_ACCESSIBLE
-  void			Client::registerOnWrite(IClientCallable *call)
+  void			Client::registerOnSend(IClientCallable *call)
   {
-    _funcWrite = NULL;
-    _callWrite = call;
+    _funcSend = NULL;
+    _callSend = call;
   }
 
   VRISKA_ACCESSIBLE
-  void			Client::unregisterOnWrite()
+  void			Client::unregisterOnSend()
   {
-    _funcWrite = NULL;
-    _callWrite = NULL;
+    _funcSend = NULL;
+    _callSend = NULL;
   }
 
   VRISKA_ACCESSIBLE
@@ -348,28 +331,28 @@ namespace Vriska
   }
 
   VRISKA_ACCESSIBLE
-  int		Client::falseRead(std::string& buffer, size_t size, unsigned int offset)
+  int		Client::peek(std::string& buffer, size_t size, unsigned int offset)
   {
     if (!_isBlocking)
-      return (SimpleClient::falseRead(buffer, size, offset));
+      return (SimpleClient::peek(buffer, size, offset));
     else
       return (0);
   }
 
   VRISKA_ACCESSIBLE
-  int		Client::falseRead(void *buffer, size_t size, unsigned int offset)
+  int		Client::peek(void *buffer, size_t size, unsigned int offset)
   {
     if (!_isBlocking)
-      return (SimpleClient::falseRead(buffer, size, offset));
+      return (SimpleClient::peek(buffer, size, offset));
     else
       return (0);
   }
 
   VRISKA_ACCESSIBLE
-  void		Client::shiftRead(unsigned int size)
+  void		Client::seek(unsigned int size)
   {
     if (!_isBlocking)
-      SimpleClient::shiftRead(size);
+      SimpleClient::seek(size);
   }
 
   VRISKA_ACCESSIBLE
@@ -378,7 +361,7 @@ namespace Vriska
     if (!_isBlocking)
       return (SimpleClient::readUntil(buffer, delim));
     else
-      return (read(buffer));
+      return (readUntil(buffer, delim));
   }
 
   VRISKA_ACCESSIBLE
@@ -503,27 +486,27 @@ namespace Vriska
     return (_funcStdin != NULL || _callStdin != NULL);
   }
 
-  bool			Client::callbackRead()
+  bool			Client::callbackReceive()
   {
     bool		ret = true;
 
-    if (_funcRead != NULL)
-      ret = (*_funcRead)(*this);
-    else if (_callRead != NULL)
-      ret = (*_callRead)(*this);
+    if (_funcReceive != NULL)
+      ret = (*_funcReceive)(*this);
+    else if (_callReceive != NULL)
+      ret = (*_callReceive)(*this);
     if (!ret)
       disconnect();
     return (ret);
   }
 
-  bool			Client::callbackWrite()
+  bool			Client::callbackSend()
   {
     bool		ret = true;
 
-    if (_funcWrite != NULL)
-      ret = (*_funcWrite)(*this);
-    else if (_callWrite != NULL)
-      ret = (*_callWrite)(*this);
+    if (_funcSend != NULL)
+      ret = (*_funcSend)(*this);
+    else if (_callSend != NULL)
+      ret = (*_callSend)(*this);
     if (!ret)
       disconnect();
     return (ret);

@@ -9,7 +9,7 @@
 
 namespace Vriska
 {
-	class VRISKA_EXPORT Exception : public std::exception
+	class Exception : public std::exception
 	{
 		public:
 			Exception(std::string const & message = "An exception occured") : _message(message) {}

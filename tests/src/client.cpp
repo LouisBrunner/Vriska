@@ -151,7 +151,7 @@ static int		testNoCallback(Vriska::Client& client, std::string const & host, uns
 	printBuffers(client);
 	client.write("hello\n");
 	printBuffers(client);
-	client.waitUntilWritten();
+	client.waitUntilSent();
 	printBuffers(client);
 	Vriska::Error::Code err = client.waitLine();
 	if (err != Vriska::Error::NoError)
@@ -230,8 +230,8 @@ static int	testNoTimeout(Vriska::Client& client, std::string const & host, unsig
 	client.setData<int&>(val);
 	std::cout << "## Test NoTimeout" << std::endl;
 	std::cout << "(Data: " << client.getData<int>() << ")" << std::endl;
-	client.registerOnRead(&readFunc);
-	client.registerOnWrite(&writeFunc);
+	client.registerOnReceive(&readFunc);
+	client.registerOnSend(&writeFunc);
 	client.registerOnStdin(&stdinFunc);
 	TEST_ERR(client.connect(host, port), "connect");
 	printGeneral(client);
@@ -284,8 +284,8 @@ static int			testEverything(Vriska::Client& client, std::string const & host, un
 	else
 		std::cout << "## Test Time Not Exact" << std::endl;
 	client.unregisterOnStdin();
-	client.registerOnRead(&readFunc);
-	client.registerOnWrite(&writeFunc);
+	client.registerOnReceive(&readFunc);
+	client.registerOnSend(&writeFunc);
 	client.setTimeout(time, &timeFunc, exact);
 	TEST_ERR(client.connect(host, port), "connect");
 	printGeneral(client);
@@ -324,7 +324,7 @@ static bool		readNC(Vriska::Client& client)
 static int	launchNC(Vriska::Client& client, std::string const & host, unsigned int port)
 {
 	client.registerOnStdin(&stdinNC);
-	client.registerOnRead(&readNC);
+	client.registerOnReceive(&readNC);
 	TEST_ERR(client.connect(host, port), "connect-nc");
 	client.launch();
 	return (0);
@@ -482,8 +482,9 @@ static int	test(int ac, char **av)
 	if (testConn)
 		if (testConnection(client, host, port))
 			return (1);
-
-	client.setLogging(logging);
+    
+	client.enableLogging(logging);
+	client.enableSysLogging(logging);
 
 	if (blocking)
 		client.setBlocking(blocking);

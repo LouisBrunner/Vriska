@@ -7,8 +7,15 @@
 namespace Vriska
 {
   VRISKA_ACCESSIBLE
-  Server::Client::Client(INativeSocket& sysSocket, Server& server, unsigned int n) : SimpleClient(sysSocket), _server(server), _n(n), _logger(n, false)
+  Server::Client::Client(INativeSocket& sysSocket, Server& server, unsigned int n) : SimpleClient(sysSocket), _server(server), _n(n)
   {
+    std::ostringstream	oss;
+
+    oss << std::setfill('0') << std::setw(10) << n;
+    setLoggingTag(server.getLoggingTag() + " - " + oss.str());
+    enableLogging(server.isLogging());
+    enableSysLogging(server.isSysLogging());
+    setLoggingStream(server.getLoggingStream());
     _connected = true;
   }
 
@@ -24,39 +31,21 @@ namespace Vriska
   }
 
   VRISKA_ACCESSIBLE
-  void			Server::Client::setLogging(bool val, std::ostream& os)
-  {
-    _logger.enable(val);
-    _logger.setStream(os);
-  }
-
-  VRISKA_ACCESSIBLE
   void	Server::Client::destroy()
   {
     SocketClient::disconnect();
     _server.disconnectMe(this);
   }
 
-  Error::Code		Server::Client::sync(bool write)
+  Error::Code		Server::Client::sync(bool send)
   {
     Error::Code	err = Error::NoError;
 
-    if (write)
-      err = doWrite();
+    if (send)
+      err = doSend();
     else if (_protocol != UDP)
-      err = doRead();
+      err = doReceive();
     return (err);
-  }
-
-  void			Server::Client::sysLog(std::string const & info)
-  {
-    _logger.log(info);
-  }
-
-  VRISKA_ACCESSIBLE
-  void			Server::Client::log(std::string const & info)
-  {
-    _logger.userLog(info);
   }
 
   int		Server::Client::writeOnBuffer(char const *buffer, size_t size)
@@ -71,13 +60,14 @@ namespace Vriska
   }
 
   VRISKA_ACCESSIBLE
-  Server::Server(Socket::Protocol protocol) : _n(0), _limit(0), _logger(false),
+  Server::Server(Socket::Protocol protocol) : _n(0), _limit(0),
 					      _tried(false), _port(0),
 					      _timeExact(true),
 					      _callConn(NULL), _funcConn(NULL), _callDisc(NULL), _funcDisc(NULL),
-					      _callRead(NULL), _funcRead(NULL), _callWrite(NULL), _funcWrite(NULL),
+					      _callReceive(NULL), _funcReceive(NULL), _callSend(NULL), _funcSend(NULL),
 					      _callStdin(NULL), _funcStdin(NULL), _callTime(NULL), _funcTime(NULL)
   {
+    setLoggingTag("Server " + StringUtils::toString(this));
     setProtocol(protocol);
   }
 
@@ -174,23 +164,32 @@ namespace Vriska
   }
 
   VRISKA_ACCESSIBLE
-  void			Server::log(std::string const & info)
+  void      Server::enableLogging(bool logging)
   {
-    _logger.userLog(info);
-  }
-
-  void			Server::sysLog(std::string const & info)
-  {
-    _logger.log(info);
-  }
-
-  VRISKA_ACCESSIBLE
-  void			Server::setLogging(bool val, std::ostream& os)
-  {
-    _logger.enable(val);
-    _logger.setStream(os);
+    Logger::enableLogging(logging);
     for (Iter it = _clients.begin(); it != _clients.end(); ++it)
-      (*it)->setLogging(val, os);
+        (*it)->enableLogging(logging);
+  }
+  
+  void  Server::enableSysLogging(bool sysLogging)
+  {
+    Logger::enableSysLogging(sysLogging);
+    for (Iter it = _clients.begin(); it != _clients.end(); ++it)
+        (*it)->enableSysLogging(sysLogging);
+  }
+
+  void  Server::setLoggingStream(std::ostream& os)
+  {
+    Logger::setLoggingStream(os);
+    for (Iter it = _clients.begin(); it != _clients.end(); ++it)
+        (*it)->setLoggingStream(os);
+  }
+
+  void  Server::setLoggingTag(std::string const & tag)
+  {
+    Logger::setLoggingTag(tag);
+    for (Iter it = _clients.begin(); it != _clients.end(); ++it)
+        (*it)->setLoggingTag(tag + " - " + StringUtils::toString((*it)->getIndex()));
   }
 
   VRISKA_ACCESSIBLE
@@ -200,45 +199,45 @@ namespace Vriska
   }
 
   VRISKA_ACCESSIBLE
-  void			Server::registerOnRead(FunctionC func)
+  void			Server::registerOnReceive(FunctionC func)
   {
-    _funcRead = func;
-    _callRead = NULL;
+    _funcReceive = func;
+    _callReceive = NULL;
   }
 
   VRISKA_ACCESSIBLE
-  void			Server::registerOnRead(IServerCCallable *call)
+  void			Server::registerOnReceive(IServerCCallable *call)
   {
-    _funcRead = NULL;
-    _callRead = call;
+    _funcReceive = NULL;
+    _callReceive = call;
   }
 
   VRISKA_ACCESSIBLE
-  void			Server::unregisterOnRead()
+  void			Server::unregisterOnReceive()
   {
-    _funcRead = NULL;
-    _callRead = NULL;
+    _funcReceive = NULL;
+    _callReceive = NULL;
   }
 
   VRISKA_ACCESSIBLE
-  void			Server::registerOnWrite(FunctionC func)
+  void			Server::registerOnSend(FunctionC func)
   {
-    _funcWrite = func;
-    _callWrite = NULL;
+    _funcSend = func;
+    _callSend = NULL;
   }
 
   VRISKA_ACCESSIBLE
-  void			Server::registerOnWrite(IServerCCallable *call)
+  void			Server::registerOnSend(IServerCCallable *call)
   {
-    _funcWrite = NULL;
-    _callWrite = call;
+    _funcSend = NULL;
+    _callSend = call;
   }
 
   VRISKA_ACCESSIBLE
-  void			Server::unregisterOnWrite()
+  void			Server::unregisterOnSend()
   {
-    _funcWrite = NULL;
-    _callWrite = NULL;
+    _funcSend = NULL;
+    _callSend = NULL;
   }
 
   VRISKA_ACCESSIBLE
@@ -409,25 +408,25 @@ namespace Vriska
     return (ret);
   }
 
-  bool			Server::callbackRead(Client& client)
+  bool			Server::callbackReceive(Client& client)
   {
     bool		ret = true;
 
-    if (_funcRead != NULL)
-      ret = (*_funcRead)(*this, client);
-    else if (_callRead != NULL)
-      ret = (*_callRead)(*this, client);
+    if (_funcReceive != NULL)
+      ret = (*_funcReceive)(*this, client);
+    else if (_callReceive != NULL)
+      ret = (*_callReceive)(*this, client);
     return (ret);
   }
 
-  bool			Server::callbackWrite(Client& client)
+  bool			Server::callbackSend(Client& client)
   {
     bool		ret = true;
 
-    if (_funcWrite != NULL)
-      ret = (*_funcWrite)(*this, client);
-    else if (_callWrite != NULL)
-      ret = (*_callWrite)(*this, client);
+    if (_funcSend != NULL)
+      ret = (*_funcSend)(*this, client);
+    else if (_callSend != NULL)
+      ret = (*_callSend)(*this, client);
     return (ret);
   }
 
@@ -455,7 +454,6 @@ namespace Vriska
       }
     sysLog("Client " + StringUtils::toString<unsigned int>(_n) + " connected from " + client->getIPAddress() + " to " + client->getIPConnectedOn());
     ++_n;
-    client->setLogging(_logger.isLogging(), _logger.getStream());
     client->setProtocol(_protocol);
     if (!callbackConnect(*client))
       {
@@ -475,15 +473,15 @@ namespace Vriska
     return (NULL);
   }
 
-  void			Server::manageClients(SocketSet& set, bool mode)
+  void			Server::manageClients(SocketSet& set, bool send)
   {
     for (SocketSet::Iter it = set.begin(); it != set.end(); ++it)
       {
 	Client	*client = getFromSocket(*it);
 
 	if (client != NULL)
-	  if (client->sync(mode) != Error::NoError
-	      || !(mode ? callbackWrite(*client) : callbackRead(*client)))
+	  if (client->sync(send) != Error::NoError
+	      || !(send ? callbackSend(*client) : callbackReceive(*client)))
 	    {
 	      _clients.remove(client);
 	      callbackDisconnect(*client);
@@ -549,7 +547,7 @@ namespace Vriska
 		    if (client != NULL)
 		      client->writeOnBuffer(buffer, size);
 		    delete[] buffer;
-		    if (client != NULL && !callbackRead(*client))
+		    if (client != NULL && !callbackReceive(*client))
 		      {
 			_clients.remove(client);
 			callbackDisconnect(*client);

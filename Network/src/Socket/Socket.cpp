@@ -3,11 +3,11 @@
 
 namespace Vriska
 {
-  Socket::Socket() : _connected(false), _protocol(TCP), _socket(*INativeSocket::create())
+  Socket::Socket() : Logger(false, false), _connected(false), _protocol(TCP), _socket(*INativeSocket::create())
   {
   }
 
-  Socket::Socket(INativeSocket& sysSocket) : _connected(false), _protocol(TCP), _socket(sysSocket)
+  Socket::Socket(INativeSocket& sysSocket) : Logger(false, false), _connected(false), _protocol(TCP), _socket(sysSocket)
   {
   }
 
@@ -35,11 +35,6 @@ namespace Vriska
   unsigned int	Socket::getPort() const
   {
     return (_socket.getPort());
-  }
-
-  void	Socket::sysLog(std::string const & info)
-  {
-    static_cast<void>(info);
   }
 
   std::string		Socket::protocolToString(Protocol protocol)

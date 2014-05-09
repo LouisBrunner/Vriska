@@ -49,11 +49,12 @@ int		main(int ac, char **av)
 
 	static_cast<void>(av);
 	server.setProtocol(ac > 1 ? Vriska::Socket::UDP : Vriska::Socket::TCP);
-	server.setLogging(true);
+	server.enableLogging(true);
+	server.enableSysLogging(true);
 	server.registerOnConnect(&onConnect);
 	server.registerOnDisconnect(&onDisconnect);
 	server.registerOnStdin(&onStdin);
-	server.registerOnRead(&onRead);
+	server.registerOnReceive(&onRead);
 	server.connect(8888);
 	server.launch();
 	return (0);

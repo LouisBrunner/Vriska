@@ -7,9 +7,11 @@
 # include <Vriska/Threads/Mutex.h>
 # include <Vriska/Threads/ScopedLock.h>
 
+# include <Vriska/Network/Logger.h>
+
 namespace Vriska
 {
-  class VRISKA_EXPORT Socket
+  class VRISKA_EXPORT Socket : public Logger
   {
   public:
     static const int	Error = INativeSocket::Error;
@@ -38,8 +40,6 @@ namespace Vriska
     virtual unsigned int	getPort() const;
     
   protected:
-    virtual void	sysLog(std::string const & info);
-
     virtual Error::Code	disconnect() = 0;
     virtual Error::Code	sync(SocketSet& read, SocketSet& write,
 			     Time* timeout = NULL, bool* hasStdin = NULL) = 0;

@@ -4,7 +4,6 @@
 
 # include <Vriska/Network/SocketServer.h>
 # include <Vriska/Network/SimpleClient.h>
-# include <Vriska/Network/Loggers.h>
 # include <Vriska/Core/Data.hpp>
 
 # include <iostream>
@@ -33,24 +32,17 @@ namespace Vriska
       
     public:
       unsigned int	getIndex() const;
-      void			setLogging(bool val, std::ostream& os = std::cerr);
       void			destroy();
       
-      Error::Code		sync(bool write);
-      
-      void			log(std::string const & info);
+      Error::Code		sync(bool send);
 
     public:
       int			writeOnBuffer(char const *buffer, size_t size);
       INativeSocket const &	getNativeSocket() const;
       
-    protected:
-      void			sysLog(std::string const & info);
-      
     private:
       Server&			_server;
       unsigned int	_n;
-      LoggerClient	_logger;
     };
     
   public:
@@ -76,9 +68,7 @@ namespace Vriska
     Error::Code		reconnect();
     Error::Code		disconnect();
     Error::Code		launch();
-    
-    void			log(std::string const & info);
-    void			setLogging(bool val, std::ostream& os = std::cerr);
+   
     void			setLimit(unsigned int limit);
     
     size_t    broadcast(void const * buffer, size_t size);
@@ -102,13 +92,21 @@ namespace Vriska
       for (Iter it = _clients.begin(); it != _clients.end(); ++it)
         (*func)(*this, *it);
     }
+
+  public:
+      void  enableLogging(bool logging);
+      void  enableSysLogging(bool sysLogging);
+      void  setLoggingStream(std::ostream& os);
+      void  setLoggingTag(std::string const & tag);
+
+  public:
     
-    void			registerOnRead(FunctionC func);
-    void			registerOnRead(IServerCCallable *call);
-    void			unregisterOnRead();
-    void			registerOnWrite(FunctionC func);
-    void			registerOnWrite(IServerCCallable *call);
-    void			unregisterOnWrite();
+    void			registerOnReceive(FunctionC func);
+    void			registerOnReceive(IServerCCallable *call);
+    void			unregisterOnReceive();
+    void			registerOnSend(FunctionC func);
+    void			registerOnSend(IServerCCallable *call);
+    void			unregisterOnSend();
     void			registerOnConnect(FunctionC func);
     void			registerOnConnect(IServerCCallable *call);
     void			unregisterOnConnect();
@@ -129,9 +127,6 @@ namespace Vriska
   public:
     unsigned int	getPort() const;
     
-  protected:
-    void			sysLog(std::string const & info);
-    
   private:
     bool			hasTimeout() const;
     Time			getTimeout() const;
@@ -142,15 +137,15 @@ namespace Vriska
     
     bool			callbackConnect(Client& client);
     bool			callbackDisconnect(Client& client);
-    bool			callbackRead(Client& client);
-    bool			callbackWrite(Client& client);
+    bool			callbackReceive(Client& client);
+    bool			callbackSend(Client& client);
     bool			callbackStdin();
     
     Client			*addNewClient(INativeSocket *sock);
     Client			*getFromSocket(INativeSocket const *sock);
     Error::Code			manageIO();
     void			clearClients();
-    void			manageClients(SocketSet& set, bool mode);    
+    void			manageClients(SocketSet& set, bool send);    
   
     static bool			yesMan(Server& server, Client& client);
     
@@ -158,7 +153,6 @@ namespace Vriska
     std::list<Client *>	_clients;
     unsigned int		_n;
     unsigned int		_limit;
-    LoggerServer		_logger;
     
     bool			_tried;
     std::string		_host;
@@ -172,10 +166,10 @@ namespace Vriska
     FunctionC			_funcConn;
     IServerCCallable	*_callDisc;
     FunctionC			_funcDisc;
-    IServerCCallable	*_callRead;
-    FunctionC			_funcRead;
-    IServerCCallable	*_callWrite;
-    FunctionC			_funcWrite;
+    IServerCCallable	*_callReceive;
+    FunctionC			_funcReceive;
+    IServerCCallable	*_callSend;
+    FunctionC			_funcSend;
     IServerCallable		*_callStdin;
     Function			_funcStdin;
     IServerCallable		*_callTime;

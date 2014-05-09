@@ -20,7 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\BufferRing.cpp" />
-    <ClCompile Include="src\Core\Loggers.cpp" />
+    <ClCompile Include="src\Core\Logger.cpp" />
     <ClCompile Include="src\Network\Client.cpp" />
     <ClCompile Include="src\Network\Server.cpp" />
     <ClCompile Include="src\Network\SimpleClient.cpp" />
@@ -47,7 +47,7 @@
     <None Include="..\Vriska\Network\ICallable.h" />
     <None Include="..\Vriska\Network\INativeSocket.h" />
     <None Include="..\Vriska\Network\LinuxSocket.h" />
-    <None Include="..\Vriska\Network\Loggers.h" />
+    <None Include="..\Vriska\Network\Logger.h" />
     <None Include="..\Vriska\Network\Server.h" />
     <None Include="..\Vriska\Network\SimpleClient.h" />
     <None Include="..\Vriska\Network\Socket.h" />

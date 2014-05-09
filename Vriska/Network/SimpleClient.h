@@ -27,9 +27,9 @@ namespace Vriska
     virtual int			read(void *buffer, size_t size);
     virtual int			read(std::string& buffer);
     virtual int			read(std::string& buffer, size_t size);
-    virtual int			falseRead(std::string& buffer, size_t size, unsigned int offset = 0);
-    virtual int			falseRead(void *buffer, size_t size, unsigned int offset = 0);
-    virtual void		shiftRead(unsigned int size);
+    virtual int			peek(std::string& buffer, size_t size, unsigned int offset = 0);
+    virtual int			peek(void *buffer, size_t size, unsigned int offset = 0);
+    virtual void		seek(unsigned int size);
     virtual int			readUntil(std::string& buffer, std::string const & delim);
     virtual int			readLine(std::string& buffer);
     virtual unsigned int 	sizeToRead() const;
@@ -44,8 +44,8 @@ namespace Vriska
     virtual unsigned int 	sizeCanWrite() const;
 
   protected:
-    Error::Code		doRead();
-    Error::Code		doWrite();
+    Error::Code		doReceive();
+    Error::Code		doSend();
     
   protected:
     BufferRing		_brRead;

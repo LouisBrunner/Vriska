@@ -37,19 +37,19 @@ namespace Vriska
   }
 
   VRISKA_ACCESSIBLE
-  int		SimpleClient::falseRead(std::string& buffer, size_t size, unsigned int offset)
+  int		SimpleClient::peek(std::string& buffer, size_t size, unsigned int offset)
   {
     return (_brRead.falseRead(buffer, size, offset));
   }
 
   VRISKA_ACCESSIBLE
-  int		SimpleClient::falseRead(void *buffer, size_t size, unsigned int offset)
+  int		SimpleClient::peek(void *buffer, size_t size, unsigned int offset)
   {
     return (_brRead.falseRead(buffer, size, offset));
   }
 
   VRISKA_ACCESSIBLE
-  void		SimpleClient::shiftRead(unsigned int size)
+  void		SimpleClient::seek(unsigned int size)
   {
     _brRead.shiftRead(size);
   }
@@ -122,7 +122,7 @@ namespace Vriska
     return (_brWrite.sizeLeft(true));
   }
 
-  Error::Code			SimpleClient::doRead()
+  Error::Code			SimpleClient::doReceive()
   {
     Error::Code		err = Error::NoError;
     std::string		all;
@@ -158,7 +158,7 @@ namespace Vriska
     return (err);
   }
 
-  Error::Code		SimpleClient::doWrite()
+  Error::Code		SimpleClient::doSend()
   {
     std::string		all;
     char			*buffer = new char[SizeBuffer];
