@@ -5,7 +5,6 @@ namespace Vriska
 {
   VRISKA_ACCESSIBLE
   Client::Client(Socket::Protocol protocol) :
-    _isBlocking(false),
     _tried(false), _port(0), _timeExact(true),
     _callReceive(NULL), _funcReceive(NULL),
     _callSend(NULL), _funcSend(NULL),
@@ -54,17 +53,6 @@ namespace Vriska
     if (!_tried)
       return (Error::NotConnected);
     return (connect(_host, _port, true));
-  }
-
-  VRISKA_ACCESSIBLE
-  void			Client::setBlocking(bool val)
-  {
-    if (_isBlocking != val)
-      {
-	_brRead.enable(val);
-	_brWrite.enable(val);
-      }
-    _isBlocking = val;
   }
 
   VRISKA_ACCESSIBLE
@@ -280,181 +268,6 @@ namespace Vriska
   Time const &	Client::getElapsedTime() const
   {
     return (_timeElapsed);
-  }
-
-  VRISKA_ACCESSIBLE
-  int				Client::read(void *buffer, size_t size)
-  {
-    if (!_isBlocking)
-      return (SimpleClient::read(buffer, size));
-    else
-      {
-        char          *cbuff = static_cast<char *>(buffer);
-        int           ret;
-        size_t        idx = 0;
-
-        do
-          {
-            ret = recv(&cbuff[idx], size - idx, true);
-            if (ret > 0)
-              idx += ret;
-          } while (ret > 0 && idx < size);
-        return (ret > 0 ? static_cast<int>(idx) : Socket::Error);
-      }
-  }
-
-  VRISKA_ACCESSIBLE
-  int 			Client::read(std::string& buffer)
-  {
-    if (!_isBlocking)
-      return (SimpleClient::read(buffer));
-    else
-      return (read(buffer, buffer.size()));
-  }
-
-  VRISKA_ACCESSIBLE
-  int 			Client::read(std::string& buffer, size_t size)
-  {
-    if (!_isBlocking)
-      return (SimpleClient::read(buffer, size));
-    else
-      {
-        int		ret;
-
-        buffer.resize(size, 0);
-        memset(&buffer[0], 0, size);
-        ret = read(&buffer[0], size);
-        if (ret > -1)
-          buffer.resize(ret, 0);
-        return (ret);
-      }
-  }
-
-  VRISKA_ACCESSIBLE
-  int		Client::peek(std::string& buffer, size_t size, unsigned int offset)
-  {
-    if (!_isBlocking)
-      return (SimpleClient::peek(buffer, size, offset));
-    else
-      return (0);
-  }
-
-  VRISKA_ACCESSIBLE
-  int		Client::peek(void *buffer, size_t size, unsigned int offset)
-  {
-    if (!_isBlocking)
-      return (SimpleClient::peek(buffer, size, offset));
-    else
-      return (0);
-  }
-
-  VRISKA_ACCESSIBLE
-  void		Client::seek(unsigned int size)
-  {
-    if (!_isBlocking)
-      SimpleClient::seek(size);
-  }
-
-  VRISKA_ACCESSIBLE
-  int 			Client::readUntil(std::string& buffer, std::string const & delim)
-  {
-    if (!_isBlocking)
-      return (SimpleClient::readUntil(buffer, delim));
-    else
-      return (readUntil(buffer, delim));
-  }
-
-  VRISKA_ACCESSIBLE
-  int 			Client::readLine(std::string& buffer)
-  {
-    if (!_isBlocking)
-      return (SimpleClient::readLine(buffer));
-    else
-      return (readUntil(buffer, "\n"));
-  }
-
-  VRISKA_ACCESSIBLE
-  unsigned int 	Client::sizeToRead() const
-  {
-    if (!_isBlocking)
-      return (SimpleClient::sizeToRead());
-    else
-      return (0);
-  }
-
-  VRISKA_ACCESSIBLE
-  unsigned int 	Client::sizeCanRead() const
-  {
-    if (!_isBlocking)
-      return (SimpleClient::sizeCanRead());
-    else
-      return (0);
-  }
-
-  VRISKA_ACCESSIBLE
-  int 			Client::write(char const *buffer)
-  {
-    if (!_isBlocking)
-      return (SimpleClient::write(buffer));
-    else
-      return (write(buffer, strlen(buffer)));
-  }
-
-  VRISKA_ACCESSIBLE
-  int 			Client::write(void const *buffer, size_t size)
-  {
-    if (!_isBlocking)
-      return (SimpleClient::write(buffer, size));
-    else
-      {
-        char const      *cbuff = static_cast<char const *>(buffer);
-        int             ret;
-        size_t          idx = 0;
-
-        do
-          {
-            ret = send(&cbuff[idx], size - idx, true);
-            if (ret > 0)
-              idx += ret;
-          } while (ret > 0 && idx < size);
-        return (ret > 0 ? static_cast<int>(idx) : Socket::Error);
-      }
-  }
-
-  VRISKA_ACCESSIBLE
-  int 			Client::write(std::string const & buffer)
-  {
-    if (!_isBlocking)
-      return (SimpleClient::write(buffer));
-    else
-      return (write(buffer.c_str(), buffer.size()));
-  }
-
-  VRISKA_ACCESSIBLE
-  int 			Client::write(std::string const & buffer, size_t size)
-  {
-    if (!_isBlocking)
-      return (SimpleClient::write(buffer, size));
-    else
-      return (write(buffer.c_str(), size));
-  }
-
-  VRISKA_ACCESSIBLE
-  unsigned int 	Client::sizeToWrite() const
-  {
-    if (!_isBlocking)
-      return (SimpleClient::sizeToWrite());
-    else
-      return (0);
-  }
-
-  VRISKA_ACCESSIBLE
-  unsigned int 	Client::sizeCanWrite() const
-  {
-    if (!_isBlocking)
-      return (SimpleClient::sizeCanWrite());
-    else
-      return (0);
   }
 
   bool			Client::hasTimeout() const

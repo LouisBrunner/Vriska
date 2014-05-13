@@ -474,7 +474,7 @@ static int	test(int ac, char **av)
 	if (parsing(ac, av, host, port, protocol, blocking, logging, testConn, testNoCB, testNoTime, testTimeNE, testET, nc, custom, threads, threads2))
 		return (1);
 
-	Vriska::Client	client;
+	Vriska::BlockingClient	client;
 	
 	if (protocol == "UDP")
 	  client.setProtocol(Vriska::Socket::UDP);
