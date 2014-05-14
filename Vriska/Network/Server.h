@@ -24,7 +24,7 @@ namespace Vriska
   public:
     class VRISKA_EXPORT Client : public SimpleClient
     {
-        friend Server;
+        friend class Server;
 
     public:
       Client(INativeSocket& sysSocket, Server& server, unsigned int n);
@@ -50,7 +50,7 @@ namespace Vriska
     };
 
   private:
-    friend Client;
+    friend class Client;
     
   public:
     typedef bool	(*FunctionC)(Server&, Client&);

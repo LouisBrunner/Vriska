@@ -25,7 +25,8 @@ SRC		=	$(DIR_SOURCE)/Core/Logger.cpp			\
 			$(DIR_SOURCE)/Socket/SocketClient.cpp		\
 			$(DIR_SOURCE)/Network/Server.cpp		\
 			$(DIR_SOURCE)/Network/SimpleClient.cpp		\
-			$(DIR_SOURCE)/Network/Client.cpp
+			$(DIR_SOURCE)/Network/Client.cpp		\
+			$(DIR_SOURCE)/Network/BlockingClient.cpp
 
 OBJ		=	$(SRC:.cpp=.o)
 
