@@ -62,9 +62,6 @@
     <None Include="..\Vriska\Network\Client.h">
       <Filter>Header Files</Filter>
     </None>
-    <None Include="..\Vriska\Network\ICallable.h">
-      <Filter>Header Files</Filter>
-    </None>
     <None Include="..\Vriska\Network\INativeSocket.h">
       <Filter>Header Files</Filter>
     </None>
@@ -96,6 +93,9 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="..\Vriska\Network\Logger.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Network\ICallable.h">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>

@@ -6,10 +6,7 @@ namespace Vriska
   VRISKA_ACCESSIBLE
   Client::Client(Socket::Protocol protocol) :
     _tried(false), _port(0), _timeExact(true),
-    _callReceive(NULL), _funcReceive(NULL),
-    _callSend(NULL), _funcSend(NULL),
-    _callStdin(NULL), _funcStdin(NULL),
-    _callTime(NULL), _funcTime(NULL)
+    _callbacks(NULL), _stdinWatcher(NULL), _timeout(NULL)
   {
     setLoggingTag("Client " + StringUtils::toString(this));
     setProtocol(protocol);
@@ -175,93 +172,42 @@ namespace Vriska
   }
 
   VRISKA_ACCESSIBLE
-  void			Client::registerOnReceive(Function func)
+  void			Client::registerCallbacks(IClientCallable* callbacks)
   {
-    _funcReceive = func;
-    _callReceive = NULL;
+    _callbacks = callbacks;
   }
 
   VRISKA_ACCESSIBLE
-  void			Client::registerOnReceive(IClientCallable *call)
+  void			Client::unregisterCallbacks()
   {
-    _funcReceive = NULL;
-    _callReceive = call;
+    _callbacks = NULL;
+  }
+  
+  VRISKA_ACCESSIBLE
+  void			Client::registerStdinWatcher(IClientStdinWatcher* stdinWatcher)
+  {
+    _stdinWatcher = stdinWatcher;
   }
 
   VRISKA_ACCESSIBLE
-  void			Client::unregisterOnReceive()
+  void          Client::unregisterStdinWatcher()
   {
-    _funcReceive = NULL;
-    _callReceive = NULL;
+    _stdinWatcher = NULL;
   }
 
   VRISKA_ACCESSIBLE
-  void			Client::registerOnSend(Function func)
-  {
-    _funcSend = func;
-    _callSend = NULL;
-  }
-
-  VRISKA_ACCESSIBLE
-  void			Client::registerOnSend(IClientCallable *call)
-  {
-    _funcSend = NULL;
-    _callSend = call;
-  }
-
-  VRISKA_ACCESSIBLE
-  void			Client::unregisterOnSend()
-  {
-    _funcSend = NULL;
-    _callSend = NULL;
-  }
-
-  VRISKA_ACCESSIBLE
-  void			Client::registerOnStdin(Function func)
-  {
-    _funcStdin = func;
-    _callStdin = NULL;
-  }
-
-  VRISKA_ACCESSIBLE
-  void			Client::registerOnStdin(IClientCallable *call)
-  {
-    _funcStdin = NULL;
-    _callStdin = call;
-  }
-
-  VRISKA_ACCESSIBLE
-  void			Client::unregisterOnStdin()
-  {
-    _funcStdin = NULL;
-    _callStdin = NULL;
-  }
-
-  VRISKA_ACCESSIBLE
-  void			Client::setTimeout(Time const & t, Function func, bool exact)
+  void			Client::setTimeout(Time const & t, IClientTimeoutable *timeout, bool exact)
   {
     _timeTarget = t;
     _timeElapsed = Time::Zero;
     _timeExact = exact;
-    _funcTime = func;
-    _callTime = NULL;
-  }
-
-  VRISKA_ACCESSIBLE
-  void			Client::setTimeout(Time const & t, IClientCallable *call, bool exact)
-  {
-    _timeTarget = t;
-    _timeElapsed = Time::Zero;
-    _timeExact = exact;
-    _funcTime = NULL;
-    _callTime = call;
+    _timeout = timeout;
   }
 
   VRISKA_ACCESSIBLE
   void			Client::unsetTimeout()
   {
-    _funcTime = NULL;
-    _callTime = NULL;
+    _timeout = NULL;
   }
 
   VRISKA_ACCESSIBLE
@@ -272,7 +218,7 @@ namespace Vriska
 
   bool			Client::hasTimeout() const
   {
-    return (_funcTime != NULL || _callTime != NULL);
+    return (_timeout != NULL);
   }
 
   Time			Client::getTimeout() const
@@ -296,17 +242,15 @@ namespace Vriska
 
   bool			Client::watchStdin() const
   {
-    return (_funcStdin != NULL || _callStdin != NULL);
+    return (_stdinWatcher != NULL);
   }
 
   bool			Client::callbackReceive()
   {
     bool		ret = true;
 
-    if (_funcReceive != NULL)
-      ret = (*_funcReceive)(*this);
-    else if (_callReceive != NULL)
-      ret = (*_callReceive)(*this);
+    if (_callbacks != NULL)
+      ret = _callbacks->onReceive(*this);
     if (!ret)
       disconnect();
     return (ret);
@@ -316,10 +260,8 @@ namespace Vriska
   {
     bool		ret = true;
 
-    if (_funcSend != NULL)
-      ret = (*_funcSend)(*this);
-    else if (_callSend != NULL)
-      ret = (*_callSend)(*this);
+    if (_callbacks != NULL)
+      ret = _callbacks->onSend(*this);
     if (!ret)
       disconnect();
     return (ret);
@@ -329,10 +271,8 @@ namespace Vriska
   {
     bool		ret = true;
 
-    if (_funcStdin != NULL)
-      ret = (*_funcStdin)(*this);
-    else if (_callStdin != NULL)
-      ret = (*_callStdin)(*this);
+    if (_stdinWatcher != NULL)
+      ret = _stdinWatcher->onStdin(*this);
     if (!ret)
       disconnect();
     return (ret);
@@ -342,10 +282,8 @@ namespace Vriska
   {
     bool		ret = true;
 
-    if (_funcTime != NULL)
-      ret = (*_funcTime)(*this);
-    else if (_callTime != NULL)
-      ret = (*_callTime)(*this);
+    if (_timeout != NULL)
+      ret = _timeout->onTimeout(*this);
     _timeElapsed = Time::Zero;
     if (!ret)
       disconnect();

@@ -14,14 +14,18 @@ namespace Vriska
 {
   // Forward declaration of IServerCallable
   class IServerCallable;
-  // Forward declaration of IServerCCallable
-  class IServerCCallable;
-  
+  // Forward declaration of IServerStdinWatcher
+  class IServerStdinWatcher;
+  // Forward declaration of IServerTimeoutable
+  class IServerTimeoutable;
+
   class VRISKA_EXPORT Server: public SocketServer, public Datable
   {
   public:
     class VRISKA_EXPORT Client : public SimpleClient
     {
+        friend Server;
+
     public:
       Client(INativeSocket& sysSocket, Server& server, unsigned int n);
       ~Client();
@@ -32,18 +36,21 @@ namespace Vriska
       
     public:
       unsigned int	getIndex() const;
-      void			destroy();
-      
+
+    private:
+      void			    destroy();  
       Error::Code		sync(bool send);
 
-    public:
-      int			writeOnBuffer(char const *buffer, size_t size);
+      int			        writeOnBuffer(char const *buffer, size_t size);
       INativeSocket const &	getNativeSocket() const;
       
     private:
-      Server&			_server;
+      Server&		_server;
       unsigned int	_n;
     };
+
+  private:
+    friend Client;
     
   public:
     typedef bool	(*FunctionC)(Server&, Client&);
@@ -100,28 +107,16 @@ namespace Vriska
       void  setLoggingTag(std::string const & tag);
 
   public:
-    
-    void			registerOnReceive(FunctionC func);
-    void			registerOnReceive(IServerCCallable *call);
-    void			unregisterOnReceive();
-    void			registerOnSend(FunctionC func);
-    void			registerOnSend(IServerCCallable *call);
-    void			unregisterOnSend();
-    void			registerOnConnect(FunctionC func);
-    void			registerOnConnect(IServerCCallable *call);
-    void			unregisterOnConnect();
-    void			registerOnDisconnect(FunctionC func);
-    void			registerOnDisconnect(IServerCCallable *call);
-    void			unregisterOnDisconnect();
-    void			registerOnStdin(Function func);
-    void			registerOnStdin(IServerCallable *call);
-    void			unregisterOnStdin();
+    void			registerCallbacks(IServerCallable* callbacks);
+    void			unregisterCallbacks();
+    void			registerStdinWatcher(IServerStdinWatcher *stdinWatcher);
+    void			unregisterStdinWatcher();
 
-    void			setTimeout(Time const & t, Function func, bool exact = true);
-    void			setTimeout(Time const & t, IServerCallable *call, bool exact = true);
+    void			setTimeout(Time const & t, IServerTimeoutable *timeout, bool exact = true);
     void			unsetTimeout();
     Time const &	getElapsedTime() const;
     
+  private:
     void			disconnectMe(Client* client);
     
   public:
@@ -143,7 +138,7 @@ namespace Vriska
     
     Client			*addNewClient(INativeSocket *sock);
     Client			*getFromSocket(INativeSocket const *sock);
-    Error::Code			manageIO();
+    Error::Code	    manageIO();
     void			clearClients();
     void			manageClients(SocketSet& set, bool send);    
   
@@ -162,18 +157,9 @@ namespace Vriska
     Time			_timeElapsed;
     bool			_timeExact;
     
-    IServerCCallable	*_callConn;
-    FunctionC			_funcConn;
-    IServerCCallable	*_callDisc;
-    FunctionC			_funcDisc;
-    IServerCCallable	*_callReceive;
-    FunctionC			_funcReceive;
-    IServerCCallable	*_callSend;
-    FunctionC			_funcSend;
-    IServerCallable		*_callStdin;
-    Function			_funcStdin;
-    IServerCallable		*_callTime;
-    Function			_funcTime;
+    IServerCallable     *_callbacks;
+    IServerStdinWatcher *_stdinWatcher;
+    IServerTimeoutable  *_timeout;
   };
 }
 

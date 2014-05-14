@@ -63,9 +63,7 @@ namespace Vriska
   Server::Server(Socket::Protocol protocol) : _n(0), _limit(0),
 					      _tried(false), _port(0),
 					      _timeExact(true),
-					      _callConn(NULL), _funcConn(NULL), _callDisc(NULL), _funcDisc(NULL),
-					      _callReceive(NULL), _funcReceive(NULL), _callSend(NULL), _funcSend(NULL),
-					      _callStdin(NULL), _funcStdin(NULL), _callTime(NULL), _funcTime(NULL)
+					      _callbacks(NULL), _stdinWatcher(NULL), _timeout(NULL)
   {
     setLoggingTag("Server " + StringUtils::toString(this));
     setProtocol(protocol);
@@ -202,135 +200,42 @@ namespace Vriska
   }
 
   VRISKA_ACCESSIBLE
-  void			Server::registerOnReceive(FunctionC func)
+  void			Server::registerCallbacks(IServerCallable* callbacks)
   {
-    _funcReceive = func;
-    _callReceive = NULL;
+    _callbacks = callbacks;
   }
 
   VRISKA_ACCESSIBLE
-  void			Server::registerOnReceive(IServerCCallable *call)
+  void			Server::unregisterCallbacks()
   {
-    _funcReceive = NULL;
-    _callReceive = call;
+    _callbacks = NULL;
   }
 
   VRISKA_ACCESSIBLE
-  void			Server::unregisterOnReceive()
+  void			Server::registerStdinWatcher(IServerStdinWatcher* stdinWatcher)
   {
-    _funcReceive = NULL;
-    _callReceive = NULL;
+    _stdinWatcher = stdinWatcher;
   }
 
   VRISKA_ACCESSIBLE
-  void			Server::registerOnSend(FunctionC func)
+  void			Server::unregisterStdinWatcher()
   {
-    _funcSend = func;
-    _callSend = NULL;
+    _stdinWatcher = NULL;
   }
 
   VRISKA_ACCESSIBLE
-  void			Server::registerOnSend(IServerCCallable *call)
-  {
-    _funcSend = NULL;
-    _callSend = call;
-  }
-
-  VRISKA_ACCESSIBLE
-  void			Server::unregisterOnSend()
-  {
-    _funcSend = NULL;
-    _callSend = NULL;
-  }
-
-  VRISKA_ACCESSIBLE
-  void			Server::registerOnConnect(FunctionC func)
-  {
-    _funcConn = func;
-    _callConn = NULL;
-  }
-
-  VRISKA_ACCESSIBLE
-  void			Server::registerOnConnect(IServerCCallable *call)
-  {
-    _funcConn = NULL;
-    _callConn = call;
-  }
-
-  VRISKA_ACCESSIBLE
-  void			Server::unregisterOnConnect()
-  {
-    _funcConn = NULL;
-    _callConn = NULL;
-  }
-
-  VRISKA_ACCESSIBLE
-  void			Server::registerOnDisconnect(FunctionC func)
-  {
-    _funcDisc = func;
-    _callDisc = NULL;
-  }
-
-  VRISKA_ACCESSIBLE
-  void			Server::registerOnDisconnect(IServerCCallable *call)
-  {
-    _funcDisc = NULL;
-    _callDisc = call;
-  }
-
-  VRISKA_ACCESSIBLE
-  void			Server::unregisterOnDisconnect()
-  {
-    _funcDisc = NULL;
-    _callDisc = NULL;
-  }
-
-  VRISKA_ACCESSIBLE
-  void			Server::registerOnStdin(Function func)
-  {
-    _funcStdin = func;
-    _callStdin = NULL;
-  }
-
-  VRISKA_ACCESSIBLE
-  void			Server::registerOnStdin(IServerCallable *call)
-  {
-    _funcStdin = NULL;
-    _callStdin = call;
-  }
-
-  VRISKA_ACCESSIBLE
-  void			Server::unregisterOnStdin()
-  {
-    _funcStdin = NULL;
-    _callStdin = NULL;
-  }
-
-  VRISKA_ACCESSIBLE
-  void			Server::setTimeout(Time const & t, Function func, bool exact)
+  void			Server::setTimeout(Time const & t, IServerTimeoutable *timeout, bool exact)
   {
     _timeTarget = t;
     _timeElapsed = Time::Zero;
     _timeExact = exact;
-    _funcTime = func;
-    _callTime = NULL;
-  }
-
-  VRISKA_ACCESSIBLE
-  void			Server::setTimeout(Time const & t, IServerCallable *call, bool exact)
-  {
-    _timeTarget = t;
-    _timeElapsed = Time::Zero;
-    _timeExact = exact;
-    _funcTime = NULL;
-    _callTime = call;
+    _timeout = timeout;
   }
 
   VRISKA_ACCESSIBLE
   void			Server::unsetTimeout()
   {
-    _funcTime = NULL;
-    _callTime = NULL;
+    _timeout = NULL;
   }
 
   VRISKA_ACCESSIBLE
@@ -350,7 +255,7 @@ namespace Vriska
 
   bool			Server::hasTimeout() const
   {
-    return (_callTime != NULL || _funcTime != NULL);
+    return (_timeout != NULL);
   }
 
   Time			Server::getTimeout() const
@@ -362,7 +267,7 @@ namespace Vriska
 
   bool			Server::watchStdin() const
   {
-    return (_funcStdin != NULL || _callStdin != NULL);
+    return (_stdinWatcher != NULL);
   }
 
   VRISKA_ACCESSIBLE
@@ -379,11 +284,9 @@ namespace Vriska
   bool			Server::callbackTimeout()
   {
     bool		ret = true;
-
-    if (_funcTime != NULL)
-      ret = (*_funcTime)(*this);
-    else if (_callTime != NULL)
-      ret = (*_callTime)(*this);
+    
+    if (_timeout != NULL)
+      ret = _timeout->onTimeout(*this);
     if (!ret)
       disconnect();
     return (ret);
@@ -392,55 +295,45 @@ namespace Vriska
   bool			Server::callbackConnect(Client& client)
   {
     bool		ret = true;
-
-    if (_funcConn != NULL)
-      ret = (*_funcConn)(*this, client);
-    else if (_callConn != NULL)
-      ret = (*_callConn)(*this, client);
+    
+    if (_callbacks != NULL)
+      ret = _callbacks->onConnect(*this, client);
     return (ret);
   }
 
   bool			Server::callbackDisconnect(Client& client)
   {
     bool		ret = true;
-
-    if (_funcDisc != NULL)
-      ret = (*_funcDisc)(*this, client);
-    else if (_callDisc != NULL)
-      ret = (*_callDisc)(*this, client);
+    
+    if (_callbacks != NULL)
+      ret = _callbacks->onDisconnect(*this, client);
     return (ret);
   }
 
   bool			Server::callbackReceive(Client& client)
   {
     bool		ret = true;
-
-    if (_funcReceive != NULL)
-      ret = (*_funcReceive)(*this, client);
-    else if (_callReceive != NULL)
-      ret = (*_callReceive)(*this, client);
+    
+    if (_callbacks != NULL)
+      ret = _callbacks->onReceive(*this, client);
     return (ret);
   }
 
   bool			Server::callbackSend(Client& client)
   {
     bool		ret = true;
-
-    if (_funcSend != NULL)
-      ret = (*_funcSend)(*this, client);
-    else if (_callSend != NULL)
-      ret = (*_callSend)(*this, client);
+    
+    if (_callbacks != NULL)
+      ret = _callbacks->onSend(*this, client);
     return (ret);
   }
 
   bool			Server::callbackStdin()
   {
     bool		ret = true;
-
-    if (_funcStdin != NULL)
-      ret = (*_funcStdin)(*this);
-    else if (_callStdin != NULL)
-      ret = (*_callStdin)(*this);
+    
+    if (_stdinWatcher != NULL)
+      ret = _stdinWatcher->onStdin(*this);
     if (!ret)
       disconnect();
     return (ret);

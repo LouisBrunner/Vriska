@@ -3,47 +3,78 @@
 # define VRISKA_LIB_NETWORK_ICALLABLE_H_
 
 # include <Vriska/Network/Server.h>
+# include <Vriska/Core/OS.h>
 
 namespace Vriska
 {
 	// Forward declaration of Client
 	class Client;
-
-	template <class Type>
-	class ICallable
+    
+	class IClientCallable
 	{
 		public:
-			virtual ~ICallable() {};
+			virtual ~IClientCallable() {}
 
-			virtual bool	operator()(Type& elem) = 0;
+        public:
+            virtual bool    onReceive(Client& client) = 0;
+            virtual bool    onSend(Client&)  { return true; }
 	};
 
-	template <class Type1, class Type2>
-	class ICallableD
+	class IServerCallable
 	{
 		public:
-			virtual ~ICallableD() {};
+			virtual ~IServerCallable() {}
 
-			virtual bool	operator()(Type1& elem1, Type2& elem2) = 0;
+        public:
+            virtual bool    onConnect(Server&, Server::Client&) { return true; }
+            virtual bool    onReceive(Server& server, Server::Client& client) = 0;
+            virtual bool    onSend(Server&, Server::Client&)  { return true; }
+            virtual bool    onDisconnect(Server&, Server::Client&)  { return true; }
 	};
 
-	class IClientCallable : public ICallable<Client>
-	{
-		public:
-			virtual ~IClientCallable() {};
-	};
+    template<class Type>
+    class ITimeoutable
+    {
+        public:
+            virtual ~ITimeoutable() {}
 
-	class IServerCallable : public ICallable<Server>
-	{
-		public:
-			virtual ~IServerCallable() {};
-	};
+        public:
+            virtual bool    onTimeout(Type& type) = 0;
+    };
 
-	class IServerCCallable : public ICallableD<Server, Server::Client>
-	{
-		public:
-			virtual ~IServerCCallable() {};
-	};
+    class IClientTimeoutable : public ITimeoutable<Client>
+    {
+        public:
+            virtual ~IClientTimeoutable() {}
+    };
+
+    class IServerTimeoutable : public ITimeoutable<Server>
+    {
+        public:
+            virtual ~IServerTimeoutable() {}
+    };
+
+    template<class Type>
+    class IStdinWatcher
+    {
+        public:
+            virtual ~IStdinWatcher() {}
+
+        public:
+            virtual bool    onStdin(Type& type) = 0;
+    };
+
+    class IClientStdinWatcher : public IStdinWatcher<Client>
+    {
+        public:
+            virtual ~IClientStdinWatcher() {}
+    };
+
+    class IServerStdinWatcher : public IStdinWatcher<Server>
+    {
+        public:
+            virtual ~IServerStdinWatcher() {}
+    };
 }
 
 #endif // !VRISKA_LIB_NETWORK_ICALLABLE_H_

@@ -55,7 +55,7 @@ namespace Vriska
     }
 
     template <class Type>
-    static void    ignore(Type t)
+    static void    ignore(Type& t)
     {
         static_cast<void>(t);
     }

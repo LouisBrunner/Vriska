@@ -33,18 +33,12 @@ namespace Vriska
     Error::Code		waitLine(bool callBack = true, bool timeOut = true);
     Error::Code		waitFor(Time const & t, bool callBack = true, bool timeOut = false);
     
-    void			registerOnReceive(Function func);
-    void			registerOnReceive(IClientCallable *call);
-    void			unregisterOnReceive();
-    void			registerOnSend(Function func);
-    void			registerOnSend(IClientCallable *call);
-    void			unregisterOnSend();
-    void			registerOnStdin(Function func);
-    void			registerOnStdin(IClientCallable *call);
-    void			unregisterOnStdin();
+    void			registerCallbacks(IClientCallable* callbacks);
+    void            unregisterCallbacks();
+    void			registerStdinWatcher(IClientStdinWatcher* stdinWatcher);
+    void            unregisterStdinWatcher();
     
-    void			setTimeout(Time const & t, Function func, bool exact = true);
-    void			setTimeout(Time const & t, IClientCallable *call, bool exact = true);
+    void			setTimeout(Time const & t, IClientTimeoutable* timeout, bool exact = true);
     void			unsetTimeout();
     Time const &	getElapsedTime() const;
     
@@ -52,19 +46,19 @@ namespace Vriska
     bool			hasTimeout() const;
     Time			getTimeout() const;
     bool			watchStdin() const;
+    
+    bool			callbackReceive();
+    bool			callbackSend();
+    bool			callbackStdin();
 
     void			addTimeout(Time const & elapsed);
     void			addTime(Time const & elapsed);
     bool			callbackTimeout();
     
-    bool			callbackReceive();
-    bool			callbackSend();
-    bool			callbackStdin();
-    
     Error::Code			manageIO(bool callBack, bool timeOut);
     
   private:    
-    bool			_tried;
+    bool			    _tried;
     std::string			_host;
     unsigned int		_port;
     
@@ -75,14 +69,9 @@ namespace Vriska
     Time			_waitTarget;
     Time			_waitElapsed;
     
-    IClientCallable	*_callReceive;
-    Function		_funcReceive;
-    IClientCallable	*_callSend;
-    Function		_funcSend;
-    IClientCallable	*_callStdin;
-    Function		_funcStdin;
-    IClientCallable	*_callTime;
-    Function		_funcTime;
+    IClientCallable     *_callbacks;
+    IClientStdinWatcher *_stdinWatcher;
+    IClientTimeoutable	*_timeout;
   };
 }
 

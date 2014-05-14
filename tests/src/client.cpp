@@ -174,74 +174,6 @@ static int		testNoCallback(Vriska::Client& client, std::string const & host, uns
 	return (0);
 }
 
-static bool		stdinFunc(Vriska::Client& client)
-{
-	std::string	line;
-
-	std::cout << "(): stdin callback (Data: " << client.getData<int&>() << ")" << std::endl;
-	printBuffers(client);
-	if (!getline(std::cin, line))
-		return (false);
-	++client.getData<int&>();
-	client.write(line + "\n");
-	printBuffers(client);
-	return (true);
-}
-
-static bool		readFunc(Vriska::Client& client)
-{
-	std::string	req;
-	std::string	line;
-
-	std::cout << "(): read callback" << std::endl;
-	printBuffers(client);
-	while (client.readUntil(line, "\n") != Vriska::BufferRing::Error)
-	{
-		if (line == "fine and you ?")
-			req = "fine\n";
-		else if (line == "hi")
-			req = "how are you ?\n";
-		else if (line == "get out")
-		{
-			std::cout << "I quit." << std::endl;
-			printBuffers(client);
-			return (false);
-		}
-		else
-			req = "what ?\n";
-		std::cout << "Received: " << line << " | Sending: " << req;
-		client.write(req);
-		printBuffers(client);
-	}
-	return (true);
-}
-
-static bool		writeFunc(Vriska::Client& client)
-{
-	std::cout << "(): write callback" << std::endl;
-	printBuffers(client);
-	return (true);
-}
-
-static int	testNoTimeout(Vriska::Client& client, std::string const & host, unsigned int port)
-{
-	int 	val = 5;
-
-	client.setData<int&>(val);
-	std::cout << "## Test NoTimeout" << std::endl;
-	std::cout << "(Data: " << client.getData<int>() << ")" << std::endl;
-	client.registerOnReceive(&readFunc);
-	client.registerOnSend(&writeFunc);
-	client.registerOnStdin(&stdinFunc);
-	TEST_ERR(client.connect(host, port), "connect");
-	printGeneral(client);
-	client.write("hello\n");
-	client.launch();
-	printGeneral(client);
-	TEST_ERR(client.disconnect(), "disconnect");
-	return (0);
-}
-
 class Info
 {
 	public:
@@ -262,19 +194,94 @@ class Info
 		bool			_exact;
 };
 
-static bool			timeFunc(Vriska::Client& client)
+class Handler : public Vriska::IClientCallable, public Vriska::IClientStdinWatcher, public Vriska::IClientTimeoutable
 {
-	Info&			info = client.getData<Info&>();
+public:
+    bool		onStdin(Vriska::Client& client)
+    {
+	    std::string	line;
 
-	static_cast<void>(info);
-	std::cout << "(): timeout callback" << std::endl;
-	std::cout << "Elapsed: " << client.getElapsedTime() << std::endl;
-	printTime();
-	return (true);
+	    std::cout << "(): stdin callback (Data: " << client.getData<int&>() << ")" << std::endl;
+	    printBuffers(client);
+	    if (!getline(std::cin, line))
+		    return (false);
+	    ++client.getData<int&>();
+	    client.write(line + "\n");
+	    printBuffers(client);
+	    return (true);
+    }
+
+    bool		onReceive(Vriska::Client& client)
+    {
+	    std::string	req;
+	    std::string	line;
+
+	    std::cout << "(): receive callback" << std::endl;
+	    printBuffers(client);
+	    while (client.readUntil(line, "\n") != Vriska::BufferRing::Error)
+	    {
+		    if (line == "fine and you ?")
+			    req = "fine\n";
+		    else if (line == "hi")
+			    req = "how are you ?\n";
+		    else if (line == "get out")
+		    {
+			    std::cout << "I quit." << std::endl;
+			    printBuffers(client);
+			    return (false);
+		    }
+		    else
+			    req = "what ?\n";
+		    std::cout << "Received: " << line << " | Sending: " << req;
+		    client.write(req);
+		    printBuffers(client);
+	    }
+	    return (true);
+    }
+
+    bool		onSend(Vriska::Client& client)
+    {
+	    std::cout << "(): send callback" << std::endl;
+	    printBuffers(client);
+	    return (true);
+    }
+    
+    bool			onTimeout(Vriska::Client& client)
+    {
+	    Info&			info = client.getData<Info&>();
+
+	    static_cast<void>(info);
+	    std::cout << "(): timeout callback" << std::endl;
+	    std::cout << "Elapsed: " << client.getElapsedTime() << std::endl;
+	    printTime();
+	    return (true);
+    }
+};
+
+static int	testNoTimeout(Vriska::Client& client, std::string const & host, unsigned int port)
+{
+    Handler handler;
+	int 	val = 5;
+
+	client.setData<int&>(val);
+	std::cout << "## Test NoTimeout" << std::endl;
+	std::cout << "(Data: " << client.getData<int>() << ")" << std::endl;
+	client.registerCallbacks(&handler);
+	client.registerStdinWatcher(&handler);
+	TEST_ERR(client.connect(host, port), "connect");
+	printGeneral(client);
+	client.write("hello\n");
+	client.launch();
+	printGeneral(client);
+	TEST_ERR(client.disconnect(), "disconnect");
+    client.unregisterCallbacks();
+    client.unregisterStdinWatcher();
+	return (0);
 }
 
 static int			testEverything(Vriska::Client& client, std::string const & host, unsigned int port, bool exact = false)
 {
+    Handler handler;
 	Vriska::Time	time(3, 0);
 	Info			info(time, exact);
 
@@ -283,10 +290,8 @@ static int			testEverything(Vriska::Client& client, std::string const & host, un
 		std::cout << "## Test Everything" << std::endl;
 	else
 		std::cout << "## Test Time Not Exact" << std::endl;
-	client.unregisterOnStdin();
-	client.registerOnReceive(&readFunc);
-	client.registerOnSend(&writeFunc);
-	client.setTimeout(time, &timeFunc, exact);
+	client.registerCallbacks(&handler);
+	client.setTimeout(time, &handler, exact);
 	TEST_ERR(client.connect(host, port), "connect");
 	printGeneral(client);
 	client.write("hello\n");
@@ -296,37 +301,46 @@ static int			testEverything(Vriska::Client& client, std::string const & host, un
 	client.launch();
 	printGeneral(client);
 	TEST_ERR(client.disconnect(), "disconnect");
+    client.unregisterCallbacks();
+    client.unsetTimeout();
 	return (0);
 }
 
-static bool			stdinNC(Vriska::Client& client)
+class HandlerNC : public Vriska::IClientCallable, public Vriska::IClientStdinWatcher
 {
-	std::string	line;
+    bool			onStdin(Vriska::Client& client)
+    {
+	    std::string	line;
 
-	std::cin.clear();
-	getline(std::cin, line);
-	if (line.empty() && std::cin.eof())
-		return (false);
-	client.write(line + (std::cin.eof() ? "" : "\n"));
-	return (true);
-}
+	    std::cin.clear();
+	    getline(std::cin, line);
+	    if (line.empty() && std::cin.eof())
+		    return (false);
+	    client.write(line + (std::cin.eof() ? "" : "\n"));
+	    return (true);
+    }
 
-static bool		readNC(Vriska::Client& client)
-{
-	std::string	buffer;
+    bool		onReceive(Vriska::Client& client)
+    {
+	    std::string	buffer;
 
-	client.read(buffer);
-	std::cout.write(buffer.c_str(), buffer.size());
-	std::cout.flush();
-	return (true);
-}
+	    client.read(buffer);
+	    std::cout.write(buffer.c_str(), buffer.size());
+	    std::cout.flush();
+	    return (true);
+    }
+};
 
 static int	launchNC(Vriska::Client& client, std::string const & host, unsigned int port)
 {
-	client.registerOnStdin(&stdinNC);
-	client.registerOnReceive(&readNC);
+    HandlerNC handler;
+    
+	client.registerCallbacks(&handler);
+	client.registerStdinWatcher(&handler);
 	TEST_ERR(client.connect(host, port), "connect-nc");
 	client.launch();
+    client.unregisterCallbacks();
+    client.unregisterStdinWatcher();
 	return (0);
 }
 
@@ -354,26 +368,32 @@ static void			sendFile(Vriska::Client& client, std::string const & path)
 	std::cout << "complete" << std::endl;
 }
 
-static bool		stdinCustom(Vriska::Client& client)
+class HandlerFile : public Vriska::IClientStdinWatcher
 {
-	std::string	line;
+    bool		onStdin(Vriska::Client& client)
+    {
+	    std::string	line;
 
-	if (!getline(std::cin, line))
-		return (false);
-	if (line == "verybig")
-		sendFile(client, "/etc/passwd.bk");
-	else if (line == "big")
-		sendFile(client, "/var/log/wtmp");
-	else
-		std::cout << "nope" << std::endl;
-	return (true);
-}
+	    if (!getline(std::cin, line))
+		    return (false);
+	    if (line == "verybig")
+		    sendFile(client, "/etc/passwd.bk");
+	    else if (line == "big")
+		    sendFile(client, "/var/log/wtmp");
+	    else
+		    std::cout << "nope" << std::endl;
+	    return (true);
+    }
+};
 
 static int	launchCustom(Vriska::Client& client, std::string const & host, unsigned int port)
 {
-	client.registerOnStdin(&stdinCustom);
+    HandlerFile handler;
+
+	client.registerStdinWatcher(&handler);
 	TEST_ERR(client.connect(host, port), "connect-custom");
 	client.launch();
+    client.unregisterStdinWatcher();
 	return (0);
 }
 
@@ -432,14 +452,18 @@ private:
   Vriska::Client&	_client;
 };
 
-static bool lolz(Vriska::Client& client)
+class HandlerThreads : public Vriska::IClientTimeoutable
 {
-  printBuffers(client);
-  return (true);
-}
+    bool onTimeout(Vriska::Client& client)
+    {
+      printBuffers(client);
+      return (true);
+    }
+};
 
 static int				launchThreads2(Vriska::Client& client, std::string const & host, unsigned int port)
 {
+    HandlerThreads handler;
   Vriska::Thread			t1;
   Vriska::Thread			t2;
   Vriska::Thread			t3;
@@ -449,8 +473,9 @@ static int				launchThreads2(Vriska::Client& client, std::string const & host, u
   t1.launch(*run);
   t2.launch(*run);
   t3.launch(*run);
-  client.setTimeout(Vriska::Time::fromSMilli(500), &lolz);
+  client.setTimeout(Vriska::Time::fromSMilli(500), &handler);
   client.launch();
+  client.unsetTimeout();
   return (0);
 }
 
