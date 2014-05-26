@@ -73,6 +73,7 @@ namespace Vriska
   Server::~Server()
   {
     clearClients();
+    _thd.join();
   }
 
   VRISKA_ACCESSIBLE
@@ -159,6 +160,13 @@ namespace Vriska
     while (isConnected() && err == Error::NoError)
       err = manageIO();
     return (err);
+  }
+
+  VRISKA_ACCESSIBLE
+  void		Server::runThread()
+  {
+    if (!_thd.isAlive())
+        _thd.launch(*this);
   }
 
   VRISKA_ACCESSIBLE
@@ -274,6 +282,11 @@ namespace Vriska
   unsigned int	Server::getPort() const
   {
     return (_port);
+  }
+
+  void	Server::run()
+  {
+    launch();
   }
 
   void			Server::addTimeout(Time const & elapsed)

@@ -5,10 +5,11 @@
 # include <Vriska/Core/Time.h>
 # include <Vriska/Network/SimpleClient.h>
 # include <Vriska/Network/ICallable.h>
+# include <Vriska/Threads/Thread.h>
  
 namespace Vriska
 {
-  class VRISKA_EXPORT Client : public SimpleClient
+  class VRISKA_EXPORT Client : public SimpleClient, public IRunnable
   {
   public:
     typedef bool	(*Function)(Client&);
@@ -27,6 +28,7 @@ namespace Vriska
     Error::Code		reconnect();
     
     Error::Code		launch();
+    void            runThread();
     Error::Code		waitUntilSent(bool callBack = true, bool timeOut = true);
     Error::Code		waitUntilDelim(std::string const & delim, bool callBack = true, bool timeOut = true);
     Error::Code		waitUntilSize(size_t size, bool callBack = true, bool timeOut = true);
@@ -42,6 +44,8 @@ namespace Vriska
     void			unsetTimeout();
     Time const &	getElapsedTime() const;
     
+    void            run();
+    
   private:
     bool			hasTimeout() const;
     Time			getTimeout() const;
@@ -56,7 +60,7 @@ namespace Vriska
     bool			callbackTimeout();
     
     Error::Code			manageIO(bool callBack, bool timeOut);
-    
+
   private:    
     bool			    _tried;
     std::string			_host;
@@ -72,6 +76,8 @@ namespace Vriska
     IClientCallable     *_callbacks;
     IClientStdinWatcher *_stdinWatcher;
     IClientTimeoutable	*_timeout;
+
+    Thread          _thd;
   };
 }
 

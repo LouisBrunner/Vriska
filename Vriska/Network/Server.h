@@ -2,9 +2,10 @@
 #ifndef VRISKA_LIB_NETWORK_SERVER_H_
 # define VRISKA_LIB_NETWORK_SERVER_H_
 
+# include <Vriska/Core/Data.hpp>
 # include <Vriska/Network/SocketServer.h>
 # include <Vriska/Network/SimpleClient.h>
-# include <Vriska/Core/Data.hpp>
+# include <Vriska/Threads/Thread.h>
 
 # include <iostream>
 # include <list>
@@ -19,7 +20,7 @@ namespace Vriska
   // Forward declaration of IServerTimeoutable
   class IServerTimeoutable;
 
-  class VRISKA_EXPORT Server: public SocketServer, public Datable
+  class VRISKA_EXPORT Server: public SocketServer, public Datable, public IRunnable
   {
   public:
     class VRISKA_EXPORT Client : public SimpleClient
@@ -75,6 +76,7 @@ namespace Vriska
     Error::Code		reconnect();
     Error::Code		disconnect();
     Error::Code		launch();
+    void            runThread();
    
     void			setLimit(unsigned int limit);
     
@@ -115,14 +117,14 @@ namespace Vriska
     void			setTimeout(Time const & t, IServerTimeoutable *timeout, bool exact = true);
     void			unsetTimeout();
     Time const &	getElapsedTime() const;
+
+    void            run();
     
-  private:
-    void			disconnectMe(Client* client);
-    
-  public:
     unsigned int	getPort() const;
     
   private:
+    void			disconnectMe(Client* client);
+
     bool			hasTimeout() const;
     Time			getTimeout() const;
     bool			watchStdin() const;
@@ -160,6 +162,8 @@ namespace Vriska
     IServerCallable     *_callbacks;
     IServerStdinWatcher *_stdinWatcher;
     IServerTimeoutable  *_timeout;
+
+    Thread          _thd;
   };
 }
 
