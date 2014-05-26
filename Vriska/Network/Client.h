@@ -29,6 +29,7 @@ namespace Vriska
     
     Error::Code		launch();
     void            runThread();
+    void            stopThread();
     Error::Code		waitUntilSent(bool callBack = true, bool timeOut = true);
     Error::Code		waitUntilDelim(std::string const & delim, bool callBack = true, bool timeOut = true);
     Error::Code		waitUntilSize(size_t size, bool callBack = true, bool timeOut = true);

@@ -15,7 +15,7 @@ namespace Vriska
   VRISKA_ACCESSIBLE
   Client::~Client()
   {
-    _thd.join();
+    stopThread();
   }
 
   VRISKA_ACCESSIBLE
@@ -68,6 +68,12 @@ namespace Vriska
   {
     if (!_thd.isAlive())
         _thd.launch(*this);
+  }
+
+  VRISKA_ACCESSIBLE
+  void		Client::stopThread()
+  {
+    _thd.join();
   }
 
   VRISKA_ACCESSIBLE

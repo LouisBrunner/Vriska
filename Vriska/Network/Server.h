@@ -77,6 +77,7 @@ namespace Vriska
     Error::Code		disconnect();
     Error::Code		launch();
     void            runThread();
+    void            stopThread();
    
     void			setLimit(unsigned int limit);
     
