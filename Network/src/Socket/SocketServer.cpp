@@ -27,21 +27,29 @@ namespace Vriska
     ScopedLock		lock(_mutex);
     Error::Code		err;
     std::string		proto = Socket::protocolToString(_protocol);
+    bool            connected = false;
 
     if (_connected)
       return (Error::AlreadyConnected);
-    sysLog("Trying to listen on port " + StringUtils::toString<unsigned int>(port)
-	   + (host != "" ? " (limited to " + host + ")" : "") + " (" + proto + ") ...");
     if ((err = _socket.socket(proto)) == Error::NoError)
       if ((err = _socket.bind(port, host)) == Error::NoError)
-	if (_protocol == UDP || (err = _socket.listen()) == Error::NoError)
-	  {
+	    if (_protocol == UDP || (err = _socket.listen()) == Error::NoError)
+	    {
+            connected = true;
+	    }
+    sysLog("Trying to listen on port " + StringUtils::toString<unsigned int>(connected ? getPort() : port)
+	        + (host != "" ? " (limited to " + host + ")" : "") + " (" + proto + ") ...");
+    if (connected)
+    {
 	    sysLog("Connected");
 	    _connected = true;
-	    return (Error::NoError);
-	  }
-    _socket.close();
-    sysLog("Error occured: " + Error::getMessage(err));
+        err = Error::NoError;
+    }
+    else
+    {
+        sysLog("Error occured: " + Error::getMessage(err));
+        _socket.close();
+    }
     return (err);
   }
 

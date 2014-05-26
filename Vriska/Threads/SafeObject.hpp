@@ -28,25 +28,11 @@ namespace Vriska
   public:
     Type& operator*()
 	{
-        if (_mutex.isRecursive())
-        {
-            ScopedLock  lock(_mutex);
-
-	        return (_object);
-        }
-        
 	    return (_object);
 	}
 
     Type* operator->()
 	{
-        if (_mutex.isRecursive())
-        {
-            ScopedLock  lock(_mutex);
-
-	        return (&_object);
-        }
-        
 	    return (&_object);
 	}
 

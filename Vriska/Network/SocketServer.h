@@ -21,7 +21,7 @@ namespace Vriska
     std::string		getIPAddress() const;
 
   protected:
-    Error::Code		connect(unsigned int port, std::string const & host = "");
+    Error::Code		connect(unsigned int port = Socket::FreePort, std::string const & host = "");
     Error::Code		disconnect();
 
     Error::Code		sync(SocketSet& read, SocketSet& write,

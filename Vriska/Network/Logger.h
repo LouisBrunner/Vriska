@@ -32,10 +32,10 @@ namespace Vriska
     void	sysLog(std::string const & info);
     void	log(std::string const & info);
 
-    void	enableLogging(bool logging);
+    void	enableLogging(bool logging = true);
     bool	isLogging() const;
 
-    void    enableSysLogging(bool sysLogging);
+    void    enableSysLogging(bool sysLogging = true);
     bool    isSysLogging() const;
 
     void                setLoggingTag(std::string const & tag);

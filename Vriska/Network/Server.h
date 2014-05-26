@@ -101,8 +101,8 @@ namespace Vriska
     }
 
   public:
-      void  enableLogging(bool logging);
-      void  enableSysLogging(bool sysLogging);
+      void  enableLogging(bool logging = true);
+      void  enableSysLogging(bool sysLogging = true);
       void  setLoggingStream(std::ostream& os);
       void  setLoggingTag(std::string const & tag);
 

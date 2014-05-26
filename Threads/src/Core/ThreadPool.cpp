@@ -39,6 +39,7 @@ namespace Vriska
     ScopedLock		lock(_list);
 
     _list->push_back(run);
+    _list.notify();
     return (true);
   }
 
