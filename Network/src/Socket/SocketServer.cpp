@@ -37,8 +37,19 @@ namespace Vriska
 	    {
             connected = true;
 	    }
-    sysLog("Trying to listen on port " + StringUtils::toString<unsigned int>(connected ? getPort() : port)
-	        + (host != "" ? " (limited to " + host + ")" : "") + " (" + proto + ") ...");
+
+    {
+        unsigned short  truePort = port;
+        std::string     portString = "a dynamic port";
+
+        if (connected && truePort == 0)
+            truePort = getPort();
+        if (truePort != 0)
+            portString = "port " + StringUtils::toString<unsigned int>(truePort);
+
+        sysLog("Trying to listen on " + portString
+	            + (host != "" ? " (limited to " + host + ")" : "") + " (" + proto + ") ...");
+    }
     if (connected)
     {
 	    sysLog("Connected");
