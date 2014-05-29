@@ -40,6 +40,7 @@ namespace Vriska
     return (*this);
   }
 
+  VRISKA_ACCESSIBLE
   void	Logger::sysLog(std::string const & info)
   {
     ScopedLock	lock(_mutexLogging);
