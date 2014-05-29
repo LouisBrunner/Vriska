@@ -39,7 +39,7 @@ namespace Vriska
 	    }
 
     {
-        unsigned short  truePort = port;
+        unsigned int  truePort = port;
         std::string     portString = "a dynamic port";
 
         if (connected && truePort == 0)
