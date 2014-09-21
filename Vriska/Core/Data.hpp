@@ -19,6 +19,10 @@ namespace Vriska
 			Data(Type data) : _data(data) {}
 			~Data() {}
 
+        private:
+            Data(Data const& other);
+            Data& operator=(Data const& other);
+
 		public:
 			Type	getData()
 			{

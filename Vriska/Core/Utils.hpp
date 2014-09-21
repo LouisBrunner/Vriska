@@ -43,7 +43,7 @@ namespace Vriska
     {
       Type			n = 0;
       unsigned int		max = sizeof(Type);
-      
+
       for (unsigned int i = 0; i < max && i < bytes.size(); ++i)
 	{
 	  if ((isBigEndian() && fromBig) || (!isBigEndian() && !fromBig))

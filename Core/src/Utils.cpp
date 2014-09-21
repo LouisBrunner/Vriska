@@ -12,7 +12,7 @@ namespace Vriska
         return '/';
 # endif // !VRISKA_WINDOWS
     }
-    
+
     VRISKA_ACCESSIBLE
     std::string  Utils::pathToNative(std::string const & path, char separator)
     {
@@ -22,7 +22,7 @@ namespace Vriska
             return path;
         return StringUtils::replaceAll(path, separator, nativeSeparator);
     }
-    
+
     VRISKA_ACCESSIBLE
     bool		Utils::isBigEndian()
     {
@@ -33,10 +33,11 @@ namespace Vriska
       tab = (char *) &i;
       return (tab[0] == 0);
     }
-    
+
     VRISKA_ACCESSIBLE
     char		Utils::toByte(int n)
     {
       return (static_cast<char>(n));
     }
 }
+

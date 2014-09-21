@@ -47,7 +47,7 @@ namespace Vriska
       ownLock();
     if (timeout != Time::Zero)
       {
-  	clock_gettime(CLOCK_REALTIME, &ts);
+  	get_clocktime(&ts);
   	ts.tv_nsec += timeout.getNano();
   	ts.tv_sec += timeout.getSeconds();
   	ret = pthread_cond_timedwait(&_condvar, mutex, &ts);

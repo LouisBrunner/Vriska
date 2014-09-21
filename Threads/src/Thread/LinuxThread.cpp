@@ -16,8 +16,8 @@ namespace Vriska
   bool			LinuxThread::operator==(INativeThread const & other) const
   {
     LinuxThread const &	nt = reinterpret_cast<LinuxThread const &>(other);
-    
-    return (pthread_equal(_thread, nt._thread != 0));
+
+    return (pthread_equal(_thread, nt._thread) != 0);
   }
 
   bool			LinuxThread::operator!=(INativeThread const & other) const

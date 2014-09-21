@@ -39,7 +39,7 @@ namespace Vriska
       unsigned int	getIndex() const;
 
     private:
-      void			    destroy();  
+      void			    destroy();
       Error::Code		sync(bool send);
 
       int			        writeOnBuffer(char const *buffer, size_t size);
@@ -48,6 +48,9 @@ namespace Vriska
     private:
       Server&		_server;
       unsigned int	_n;
+        
+    protected:
+      using SimpleClient::sync;
     };
 
   private:
@@ -90,7 +93,7 @@ namespace Vriska
 
       sysLog("Broadcast: " + StringUtils::escape(std::string(static_cast<char const *>(buffer), size)));
       for (Iter it = _clients.begin(); it != _clients.end(); ++it)
-        if ((*func)(*this, *(*it)))
+        if (func(*this, *(*it)))
           if ((*it)->write(buffer, size) == static_cast<int>(size))
             ++i;
       return (i);
@@ -100,7 +103,7 @@ namespace Vriska
     void			forAll(Func func)
     {
       for (Iter it = _clients.begin(); it != _clients.end(); ++it)
-        (*func)(*this, *(*it));
+        func(*this, *(*it));
     }
 
   public:

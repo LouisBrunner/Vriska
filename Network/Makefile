@@ -5,7 +5,12 @@ DIR_SOURCE	=	src
 DIR_INCLUDE	=	..
 DIR_LIB		=	..
 
-CXX		=	g++
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+	CXX = clang++
+else
+	CXX		=	g++
+endif
 RM		=	rm -f
 
 CXXFLAGS	+=	-W -Wall -Wextra -ansi -pedantic

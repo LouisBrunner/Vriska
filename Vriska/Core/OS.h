@@ -16,6 +16,10 @@
 #  define VRISKA_EXPORT
 # endif // !__MINGW32__ || _WIN32
 
+# if defined(__MACH__) || defined(__APPLE__)
+#  define VRISKA_MAC
+# endif // !__MACH__ || __APPLE__
+
 # ifdef VRISKA_WINDOWS
 #  pragma warning( disable : 4251 )
 #  pragma warning( disable : 4275 )

@@ -5,15 +5,20 @@ DIR_SOURCE	=	src
 DIR_INCLUDE	=	..
 DIR_LIB		=	..
 
-CXX		=	g++
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+	CXX = clang++
+else
+	CXX			=	g++
+    BINFLAGS	+=	-lrt
+endif
 RM		=	rm -f
 
 CXXFLAGS	+=	-W -Wall -Wextra -ansi -pedantic
 CXXFLAGS	+=	-fvisibility=hidden -fPIC
 CXXFLAGS	+=	-I$(DIR_INCLUDE)
 #CXXFLAGS	+=	-ggdb
-BINFLAGS	+=	-shared -fPIC
-BINFLAGS	+=	-lpthread -lrt
+BINFLAGS	+=	-shared -fPIC -lpthread
 BINFLAGS	+=	-L$(DIR_LIB) -lVriskaCore -Wl,-rpath,`pwd`/$(DIR_LIB)
 
 SRC		=	$(DIR_SOURCE)/CondVar/INativeCondVar.cpp	\

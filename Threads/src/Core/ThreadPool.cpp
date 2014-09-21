@@ -6,7 +6,7 @@
 namespace Vriska
 {
   VRISKA_ACCESSIBLE
-  ThreadPool::ThreadPool(unsigned int n) : _end(false), _number(n)
+  ThreadPool::ThreadPool(unsigned int n) : _end(false)
   {
     for (unsigned int i = 0; i < n; ++i)
       _pool.push_back(new Thread);

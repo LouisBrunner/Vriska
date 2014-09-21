@@ -25,7 +25,6 @@ namespace Vriska
 
   private:
     bool			_end;
-    unsigned int		_number;
     CondVar			_cv;
     Mutex			_mutex;
     SafeList<IRunnable*>	_list;
