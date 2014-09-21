@@ -2,7 +2,7 @@
 #include <iostream>
 #include <cstdlib>
 
-#include "Vriska/Core.hh"
+#include "Vriska/Core.h"
 
 static int	usage(std::string const & bin)
 {
@@ -23,9 +23,9 @@ int main(int ac, char **av)
   int	n = atoi(av[1]);
   std::cout << n << std::endl;
 
-  std::string	n2 = Vriska::StringUtils::toBytes<unsigned int>(n, toBig);
+  std::string	n2 = Vriska::Utils::toEndianess<unsigned int>(n, toBig);
   std::cout << Vriska::StringUtils::escape(n2) << std::endl;
 
-  std::cout << Vriska::StringUtils::fromBytes<unsigned int>(n2, toBig) << std::endl;
+  std::cout << Vriska::Utils::fromEndianess<unsigned int>(n2, toBig) << std::endl;
   return (0);
 }
