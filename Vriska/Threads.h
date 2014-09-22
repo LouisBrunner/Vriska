@@ -10,5 +10,6 @@
 # include <Vriska/Threads/ScopedLock.h>
 # include <Vriska/Threads/Thread.h>
 # include <Vriska/Threads/ThreadPool.h>
+# include <Vriska/Threads/Timer.h>
 
 #endif // !VRISKA_LIB_PUBLIC_THREADS_H_

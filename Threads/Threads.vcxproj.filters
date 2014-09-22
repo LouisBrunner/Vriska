@@ -30,6 +30,9 @@
     <ClCompile Include="src\Core\ThreadPool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\Timer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\Mutex\INativeMutex.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -90,6 +93,9 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="..\Vriska\Threads\ThreadPool.h">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Vriska\Threads\Timer.h">
       <Filter>Header Files</Filter>
     </None>
     <None Include="..\Vriska\Threads.h">

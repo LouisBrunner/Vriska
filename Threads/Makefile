@@ -31,6 +31,7 @@ SRC		=	$(DIR_SOURCE)/CondVar/INativeCondVar.cpp	\
 			$(DIR_SOURCE)/Thread/LinuxThread.cpp		\
 			$(DIR_SOURCE)/Thread/Thread.cpp			\
 			$(DIR_SOURCE)/Core/ScopedLock.cpp		\
+			$(DIR_SOURCE)/Core/Timer.cpp			\
 			$(DIR_SOURCE)/Core/ThreadPool.cpp
 
 OBJ		=	$(SRC:.cpp=.o)
