@@ -11,6 +11,7 @@ set(VRISKA_THREAD_SRCS
     src/Thread/INativeThread.cpp
     src/Thread/Thread.cpp
     src/Core/ScopedLock.cpp
+    src/Core/Timer.cpp
     src/Core/ThreadPool.cpp)
 
 if(MSVC)
