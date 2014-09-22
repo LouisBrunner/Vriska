@@ -128,16 +128,16 @@ namespace Vriska
   Error::Code	Client::manageIO(bool callBack, bool timeOut)
   {
     Error::Code	err;
-    SocketSet	read;
-    SocketSet	write;
+    SocketSet	readSet;
+    SocketSet	writeSet;
     Time	timeout = getTimeout();
     bool	hasStdin = false;
 
     if (sizeCanRead() > 0)
-      read.pushSocket(&_socket);
+      readSet.pushSocket(&_socket);
     if (sizeToWrite() > 0)
-      write.pushSocket(&_socket);
-    err = sync(read, write, hasTimeout() ? &timeout : NULL, watchStdin() ? &hasStdin : NULL);
+      writeSet.pushSocket(&_socket);
+    err = sync(readSet, writeSet, hasTimeout() ? &timeout : NULL, watchStdin() ? &hasStdin : NULL);
     if (err == Error::NoError)
       {
 	if (callBack && hasStdin)
@@ -147,7 +147,7 @@ namespace Vriska
 	      return (Error::Disconnected);
 	    }
 
-	if (read.hasSocket(&_socket))
+	if (readSet.hasSocket(&_socket))
 	  {
 	    if ((err = doReceive()) != Error::NoError)
 	      {
@@ -158,7 +158,7 @@ namespace Vriska
 	      if (!callbackReceive())
 		return (Error::Disconnected);
 	  }
-	if (write.hasSocket(&_socket))
+	if (writeSet.hasSocket(&_socket))
 	  {
 	    if ((err = doSend()) != Error::NoError)
 	      return (err);

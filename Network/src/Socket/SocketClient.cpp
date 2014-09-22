@@ -84,7 +84,7 @@ namespace Vriska
     return (_socket.select(read, write, timeout, hasStdin));
   }
 
-  int			SocketClient::recv(void *buffer, size_t size, bool log)
+  int			SocketClient::recv(void *buffer, size_t size, bool logEnabled)
   {
     ScopedLock		lock(_mutex);
     int			ret;
@@ -92,7 +92,7 @@ namespace Vriska
     if (!_connected)
       return (Error::NotConnected);
     ret = _socket.recv(buffer, size);
-    if (log && ret > 0)
+    if (logEnabled && ret > 0)
       sysLog("Received: " + StringUtils::escape(std::string(static_cast<char *>(buffer), ret)));
     if (ret < 1)
       {
@@ -106,7 +106,7 @@ namespace Vriska
     return (ret);
   }
 
-  int			SocketClient::send(void const *buffer, size_t size, bool log)
+  int			SocketClient::send(void const *buffer, size_t size, bool logEnabled)
   {
     ScopedLock		lock(_mutex);
     int			ret = -1;
@@ -114,7 +114,7 @@ namespace Vriska
     if (!_connected)
       return (Error::NotConnected);
     ret = _socket.send(buffer, size);
-    if (log && ret > 0)
+    if (logEnabled && ret > 0)
       sysLog("Sent: " + StringUtils::escape(std::string(static_cast<char const *>(buffer), ret)));
     if (ret < 0)
       {

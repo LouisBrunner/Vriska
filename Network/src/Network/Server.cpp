@@ -37,11 +37,11 @@ namespace Vriska
     _server.disconnectMe(this);
   }
 
-  Error::Code		Server::Client::sync(bool send)
+  Error::Code		Server::Client::sync(bool sendMode)
   {
     Error::Code	err = Error::NoError;
 
-    if (send)
+    if (sendMode)
       err = doSend();
     else if (_protocol != UDP)
       err = doReceive();

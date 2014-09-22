@@ -44,23 +44,23 @@ namespace Vriska
   }
 
   VRISKA_ACCESSIBLE
-  bool	CondVar::notify(bool lock)
+  bool	CondVar::notify(bool lockMutex)
   {
-    return (_condvar.notify(lock));
+    return (_condvar.notify(lockMutex));
   }
 
   VRISKA_ACCESSIBLE
-  bool	CondVar::notifyAll(bool lock)
+  bool	CondVar::notifyAll(bool lockMutex)
   {
-    return (_condvar.notifyAll(lock));
+    return (_condvar.notifyAll(lockMutex));
   }
 
   VRISKA_ACCESSIBLE
-  CondVar::Result		CondVar::wait(Time const & timeout, bool lock)
+  CondVar::Result		CondVar::wait(Time const & timeout, bool lockMutex)
   {
     INativeCondVar::Result	res;
 
-    res = _condvar.wait(timeout, lock);
+    res = _condvar.wait(timeout, lockMutex);
     if (res == INativeCondVar::Failed)
       return (Failed);
     else if (res == INativeCondVar::Timeout)

@@ -13,37 +13,37 @@ namespace Vriska
     pthread_cond_destroy(&_condvar);
   }
 
-  bool			LinuxCondVar::notify(bool lock)
+  bool			LinuxCondVar::notify(bool lockMutex)
   {
     bool		res;
 
-    if (lock)
+    if (lockMutex)
       ownLock();
     res = (pthread_cond_signal(&_condvar) == 0);
-    if (lock)
+    if (lockMutex)
       ownUnlock();
     return (res);
   }
 
-  bool			LinuxCondVar::notifyAll(bool lock)
+  bool			LinuxCondVar::notifyAll(bool lockMutex)
   {
     bool		res;
 
-    if (lock)
+    if (lockMutex)
       ownLock();
     res = (pthread_cond_broadcast(&_condvar) == 0);
-    if (lock)
+    if (lockMutex)
       ownUnlock();
     return (res);
   }
 
-  INativeCondVar::Result	LinuxCondVar::wait(Time const & timeout, bool lock)
+  INativeCondVar::Result	LinuxCondVar::wait(Time const & timeout, bool lockMutex)
   {
     pthread_mutex_t*		mutex = reinterpret_cast<pthread_mutex_t *>(_mutex.getNative());
     int				ret;
     timespec			ts;
 
-    if (lock)
+    if (lockMutex)
       ownLock();
     if (timeout != Time::Zero)
       {
@@ -56,7 +56,7 @@ namespace Vriska
       }
     else
       ret = pthread_cond_wait(&_condvar, mutex);
-    if (lock)
+    if (lockMutex)
       ownUnlock();
     if (ret == 0)
       return (INativeCondVar::NoError);

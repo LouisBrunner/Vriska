@@ -34,11 +34,11 @@ namespace Vriska
   }
 
   VRISKA_ACCESSIBLE
-  bool			ThreadPool::execute(IRunnable* run)
+  bool			ThreadPool::execute(IRunnable* toRun)
   {
     ScopedLock		lock(_list);
 
-    _list->push_back(run);
+    _list->push_back(toRun);
     _list.notify();
     return (true);
   }
@@ -46,7 +46,7 @@ namespace Vriska
   VRISKA_ACCESSIBLE
   void			ThreadPool::run()
   {
-    IRunnable		*run;
+    IRunnable		*toRun;
 
     _cv.notify();
     _mutex.lock();
@@ -61,10 +61,10 @@ namespace Vriska
 	  }
 	else
 	  {
-        run = _list->front();
+        toRun = _list->front();
         (*_list).pop_front();
 	    _list.unlock();
-	    run->run();
+	    toRun->run();
 	  }
 	_mutex.lock();
       }
