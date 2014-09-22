@@ -33,22 +33,22 @@ namespace Vriska
 	};
 
     template<class Type>
-    class ITimeoutable
+    class INTimeoutable
     {
         public:
-            virtual ~ITimeoutable() {}
+            virtual ~INTimeoutable() {}
 
         public:
             virtual bool    onTimeout(Type& type) = 0;
     };
 
-    class IClientTimeoutable : public ITimeoutable<Client>
+    class IClientTimeoutable : public INTimeoutable<Client>
     {
         public:
             virtual ~IClientTimeoutable() {}
     };
 
-    class IServerTimeoutable : public ITimeoutable<Server>
+    class IServerTimeoutable : public INTimeoutable<Server>
     {
         public:
             virtual ~IServerTimeoutable() {}
