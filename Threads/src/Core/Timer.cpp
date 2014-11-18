@@ -1,6 +1,5 @@
 #include <Vriska/Threads/Timer.h>
 
-#include <iostream>
 namespace Vriska
 {
     VRISKA_ACCESSIBLE
