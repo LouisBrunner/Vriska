@@ -24,7 +24,6 @@ namespace Vriska
     void Timer::launch()
     {
         struct timeval ntime;
-        int ret;
         bool loop;
         Time elapsed;
 
@@ -40,6 +39,8 @@ namespace Vriska
 # ifdef VRISKA_WINDOWS
             Sleep(elapsed.toMilli());
 # else
+            int ret;
+
             ret = ::select(0, NULL, NULL, NULL, &ntime);
 
             if (ret == -1)

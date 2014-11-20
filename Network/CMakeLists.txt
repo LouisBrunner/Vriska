@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
+add_definitions(-DVRISKA_LIB_EXPORT)
+
 set(VRISKA_NETWORK_LIB VriskaNetwork)
 set(VRISKA_NETWORK_LIB ${VRISKA_NETWORK_LIB} PARENT_SCOPE)
 

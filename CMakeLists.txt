@@ -43,8 +43,6 @@ if(APPLE)
 endif()
 #/Common vars
 
-add_definitions(-DVRISKA_LIB_EXPORT)
-
 set(VRISKA_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(VRISKA_LIBRARIES_DIRS ${PROJECT_BINARY_DIR}/lib)
 

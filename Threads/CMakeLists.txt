@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
+add_definitions(-DVRISKA_LIB_EXPORT)
+
 set(VRISKA_THREAD_LIB VriskaThreads)
 set(VRISKA_THREAD_LIB ${VRISKA_THREAD_LIB} PARENT_SCOPE)
 
@@ -18,7 +20,8 @@ if(MSVC)
     set(VRISKA_THREAD_SRCS ${VRISKA_THREAD_SRCS}
         src/CondVar/WindowsCondVar.cpp
         src/Mutex/WindowsMutex.cpp
-        src/Thread/WindowsThread.cpp)
+        src/Thread/WindowsThread.cpp
+        src/Startup.cpp)
 else()
     set(VRISKA_THREAD_SRCS ${VRISKA_THREAD_SRCS}
         src/CondVar/LinuxCondVar.cpp
