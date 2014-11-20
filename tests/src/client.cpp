@@ -37,11 +37,17 @@ static void		printBuffers(Vriska::Client const & client)
 static void				printTime()
 {
 	char				buffer[255];
-	time_t				t;
+	time_t			t;
+	struct tm		tm;
 
 	t = time(NULL);
 	memset(buffer, 0, 255);
-	strftime(buffer, 255, "%d/%m/%y %H:%M:%S", localtime(&t));
+#ifdef VRISKA_WINDOWS
+	localtime_s(&tm, &t);
+#else // !VRISKA_WINDOWS
+	localtime_r(&t, &tm);
+#endif // !VRISKA_WINDOWS
+	strftime(buffer, 255, "%d/%m/%y %H:%M:%S", &tm);
 	std::cout << "[" << buffer << "]" << std::endl;
 }
 
@@ -245,7 +251,7 @@ public:
 	    printBuffers(client);
 	    return (true);
     }
-    
+
     bool			onTimeout(Vriska::Client& client)
     {
 	    Info&			info = client.getData<Info&>();
@@ -334,7 +340,7 @@ class HandlerNC : public Vriska::IClientCallable, public Vriska::IClientStdinWat
 static int	launchNC(Vriska::Client& client, std::string const & host, unsigned int port)
 {
     HandlerNC handler;
-    
+
 	client.registerCallbacks(&handler);
 	client.registerStdinWatcher(&handler);
 	TEST_ERR(client.connect(host, port), "connect-nc");
@@ -500,14 +506,14 @@ static int	test(int ac, char **av)
 		return (1);
 
 	Vriska::BlockingClient	client;
-	
+
 	if (protocol == "UDP")
 	  client.setProtocol(Vriska::Socket::UDP);
 
 	if (testConn)
 		if (testConnection(client, host, port))
 			return (1);
-    
+
 	client.enableLogging(logging);
 	client.enableSysLogging(logging);
 
