@@ -18,7 +18,8 @@ set(VRISKA_NETWORK_SRCS
 
 if(MSVC)
     set(VRISKA_NETWORK_SRCS ${VRISKA_NETWORK_SRCS}
-        src/Socket/WindowsSocket.cpp)
+        src/Socket/WindowsSocket.cpp
+        src/Startup.cpp)
 else()
     set(VRISKA_NETWORK_SRCS ${VRISKA_NETWORK_SRCS}
         src/Socket/LinuxSocket.cpp)
@@ -26,4 +27,9 @@ endif()
 
 add_library(${VRISKA_NETWORK_LIB} ${VRISKA_LIBRARY_TYPE} ${VRISKA_NETWORK_SRCS})
 set_target_properties(${VRISKA_NETWORK_LIB} PROPERTIES COMPILE_FLAGS "${VRISKA_COMPILE_FLAGS}")
-target_link_libraries(${VRISKA_NETWORK_LIB} ${VRISKA_CORE_LIB} ${VRISKA_THREAD_LIB})
+
+if (WIN32)
+  target_link_libraries(${VRISKA_NETWORK_LIB} ${VRISKA_CORE_LIB} ${VRISKA_THREAD_LIB} wsock32 ws2_32)
+else()
+  target_link_libraries(${VRISKA_NETWORK_LIB} ${VRISKA_CORE_LIB} ${VRISKA_THREAD_LIB})
+endif()

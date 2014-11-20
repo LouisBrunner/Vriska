@@ -32,8 +32,9 @@ namespace Vriska
   public:
     enum Name
       {
-	Linux = 0,
-	Windows
+        Linux = 0,
+        MacOS,
+        Windows
       };
 
     static Name	getOS();

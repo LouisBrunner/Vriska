@@ -29,7 +29,7 @@ endif()
 
 if (CMAKE_BUILD_TYPE MATCHES "Debug")
     if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
-        set(VRISKA_COMPILE_FLAGS "${VRISKA_COMPILE_FLAGS} -Wall -Wextra -Wshadow -Wundef -ansi -pedantic")
+        set(VRISKA_COMPILE_FLAGS "${VRISKA_COMPILE_FLAGS} -Wall -Wextra -Wshadow -Wundef")
     elseif(MSVC)
         set(VRISKA_COMPILE_FLAGS "${VRISKA_COMPILE_FLAGS} /wd4251")
     endif()
@@ -42,6 +42,8 @@ if(APPLE)
     set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
 endif()
 #/Common vars
+
+add_definitions(-DVRISKA_LIB_EXPORT)
 
 set(VRISKA_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(VRISKA_LIBRARIES_DIRS ${PROJECT_BINARY_DIR}/lib)

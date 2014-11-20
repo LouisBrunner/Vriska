@@ -5,8 +5,10 @@ namespace Vriska
 {
   OS::Name	OS::getOS()
   {
-#ifdef VRISKA_WINDOWS
+#if defined(VRISKA_WINDOWS)
     return (Windows);
+#elif defined(VRISKA_MAC)
+    return (MacOS);
 #else
     return (Linux);
 #endif // !VRISKA_WINDOWS

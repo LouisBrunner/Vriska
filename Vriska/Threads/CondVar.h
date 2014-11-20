@@ -13,7 +13,7 @@ namespace Vriska
   public:
     enum Result
       {
-	NoError,
+	NoError = 0,
 	Failed,
 	Timeout
       };

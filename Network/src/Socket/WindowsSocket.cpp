@@ -1,6 +1,8 @@
 
 #include <Vriska/Network/WindowsSocket.h>
 
+#include <algorithm>
+
 namespace Vriska
 {
   WindowsSocket::WindowsSocket() : _sock(INVALID_SOCKET)
@@ -111,7 +113,7 @@ namespace Vriska
       }
     return (Error::NoError);
   }
-    
+
   void			WindowsSocket::setSockets(SocketSet& set, fd_set& nset, SOCKET& max)
   {
     SOCKET		sock;
@@ -138,7 +140,7 @@ namespace Vriska
 	  ++it;
       }
   }
-    
+
   Error::Code       WindowsSocket::select(SocketSet& read, SocketSet& write, Time* timeout, bool* hasStdin)
   {
     ScopedLock      lock(_mutex);
@@ -170,7 +172,7 @@ namespace Vriska
         removeSockets(write, fwrite);
       }
     return (Error::NoError);
-  }    
+  }
 
   Error::Code		WindowsSocket::accept(INativeSocket** client)
   {
