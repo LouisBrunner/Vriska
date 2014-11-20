@@ -8,7 +8,8 @@
 # include <Vriska/Threads/ScopedLock.h>
 
 # ifdef VRISKA_WINDOWS
-#  include <winsock2.h>
+#  include <WinBase.h>
+#  include <Synchapi.h>
 # else
 #  include <sys/select.h>
 # endif // !VRISKA_WINDOWS

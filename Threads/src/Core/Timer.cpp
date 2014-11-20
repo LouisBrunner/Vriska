@@ -37,10 +37,15 @@ namespace Vriska
                 elapsed = _timeout;
             }
 
+# ifdef VRISKA_WINDOWS
+            Sleep(elapsed.toMilli());
+# else
             ret = ::select(0, NULL, NULL, NULL, &ntime);
 
             if (ret == -1)
                 return;
+# endif // !VRISKA_WINDOWS
+
             loop = _callback.onTimeout(elapsed);
         } while (loop);
     }
