@@ -22,6 +22,10 @@ if(MSVC)
     set(VRISKA_NETWORK_SRCS ${VRISKA_NETWORK_SRCS}
         src/Socket/WindowsSocket.cpp
         src/Startup.cpp)
+    if (VRISKA_LIBRARY_TYPE STREQUAL "SHARED")
+      set(VRISKA_NETWORK_SRCS ${VRISKA_NETWORK_SRCS}
+          ../Core/src/InitTime.cpp)
+    endif()
 else()
     set(VRISKA_NETWORK_SRCS ${VRISKA_NETWORK_SRCS}
         src/Socket/LinuxSocket.cpp)

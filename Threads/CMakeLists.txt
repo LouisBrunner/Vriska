@@ -20,8 +20,11 @@ if(MSVC)
     set(VRISKA_THREAD_SRCS ${VRISKA_THREAD_SRCS}
         src/CondVar/WindowsCondVar.cpp
         src/Mutex/WindowsMutex.cpp
-        src/Thread/WindowsThread.cpp
-        src/Startup.cpp)
+        src/Thread/WindowsThread.cpp)
+    if (VRISKA_LIBRARY_TYPE STREQUAL "SHARED")
+      set(VRISKA_THREAD_SRCS ${VRISKA_THREAD_SRCS}
+          ../Core/src/InitTime.cpp)
+    endif()
 else()
     set(VRISKA_THREAD_SRCS ${VRISKA_THREAD_SRCS}
         src/CondVar/LinuxCondVar.cpp

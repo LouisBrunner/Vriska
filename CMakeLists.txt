@@ -16,6 +16,12 @@ else()
 endif()
 #/Conf
 
+if (VRISKA_LIBRARY_TYPE STREQUAL "SHARED")
+  add_definitions(-DVRISKA_LIB_DYNAMIC)
+else()
+  add_definitions(-DVRISKA_LIB_STATIC)
+endif()
+
 #Common vars
 set(BUILD_FOLDER ${PROJECT_BINARY_DIR})
 set(EXECUTABLE_OUTPUT_PATH "${BUILD_FOLDER}/bin")

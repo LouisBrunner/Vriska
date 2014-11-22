@@ -5,7 +5,9 @@
 # if defined(__MINGW32__) || defined(_WIN32)
 #  define VRISKA_WINDOWS
 #  define VRISKA_ACCESSIBLE
-#  if defined(VRISKA_LIB_EXPORT)
+#  if !defined(VRISKA_LIB_DYNAMIC)
+#   define VRISKA_EXPORT
+#  elif defined(VRISKA_LIB_EXPORT)
 #   define VRISKA_EXPORT __declspec(dllexport)
 #  else
 #   define VRISKA_EXPORT __declspec(dllimport)
