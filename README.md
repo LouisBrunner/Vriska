@@ -38,3 +38,9 @@ There is a test/example project in the directory *tests* at the root of the repo
 It shows how to properly build the project with CMake.
 
 Moreover, it explains how to implements a basic server, a lot of the client features, the timer feature and switching endianness.
+
+
+Author
+======
+
+Created by [Louis Brunner](https://github.com/Hyrrmadr). Some contributions from [Jonathan Nau](https://github.com/sadikum) and [Thibault Schueller](https://github.com/ryp).
